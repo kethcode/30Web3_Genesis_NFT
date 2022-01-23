@@ -1,4 +1,5 @@
 import React from "react";
+import { useIsConnected } from "../hooks/useIsConnected";
 import Address from "./Address";
 // import Balance from "./Balance";
 import M3Button from "./M3Button";
@@ -40,7 +41,7 @@ import M3Button from "./M3Button";
               (ex. by default "https://etherscan.io/" or for xdai "https://blockscout.com/poa/xdai/")
 */
 
-export default function Account({
+const Account = ({
   useBurner,
   address,
   userSigner,
@@ -53,13 +54,25 @@ export default function Account({
   logoutOfWeb3Modal,
   blockExplorer,
   isContract,
-}) {
-  return web3Modal && web3Modal.cachedProvider ? (
-    // <M3Button variant="outline" onClick={logoutOfWeb3Modal}>
-    // </M3Button>
-    <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} />
+  buttonVariant = "outline",
+}) => {
+  const isConnected = useIsConnected(web3Modal);
+
+  return isConnected ? (
+    <>
+      <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} />
+      <M3Button
+        variant="outline"
+        onClick={logoutOfWeb3Modal}
+        icon={<span className="material-icons">logout</span>}
+      ></M3Button>
+    </>
   ) : (
-    <M3Button variant="outline" onClick={loadWeb3Modal} icon={<span className="material-icons">account_circle</span>}>
+    <M3Button
+      variant={buttonVariant}
+      onClick={loadWeb3Modal}
+      icon={<span className="material-icons">account_circle</span>}
+    >
       Connect wallet
     </M3Button>
   );
@@ -142,4 +155,6 @@ export default function Account({
   //       {modalButtons}
   //     </div>
   //   );
-}
+};
+
+export default Account;

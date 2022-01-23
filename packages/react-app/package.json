@@ -39,7 +39,7 @@
     "eth-hooks": "2.3.16",
     "ethers": "^5.4.1",
     "fortmatic": "^2.2.1",
-    "framer-motion": "^5.6.0",
+    "framer-motion": "^4.1.17",
     "graphiql": "^1.4.7",
     "graphql": "^15.3.0",
     "isomorphic-fetch": "^3.0.0",

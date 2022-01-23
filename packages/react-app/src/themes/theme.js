@@ -6,12 +6,12 @@ import elevations from "./elevations.json";
 
 const COLOR_MODES = ["light", "dark"];
 
-const getToken = (theme, id, colorMode) => {
+const getToken = (theme, id, colorMode = "light") => {
   assert(
     COLOR_MODES.includes(colorMode),
     `Unknown color mode ${colorMode} passed. Please provide on of 'light' or 'dark'`,
   );
-  const token = theme.tokens.find(e => e.id === id + "." + colorMode);
+  const token = theme.colors.find(e => e.id === id + "." + colorMode);
   assert(token, `No token with passed id/colorMode ${id}.${colorMode}`);
   return token.value;
 };
@@ -45,7 +45,7 @@ const getFromTheme = (theme, id, colorMode) => {
 };
 
 const theme = {
-  tokens: tokens.entities,
+  colors: tokens.entities,
   fonts: fonts.entities,
   elevations: elevations,
   get: (id, colorMode) => getFromTheme(theme, id, colorMode),
