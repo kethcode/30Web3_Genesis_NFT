@@ -1,7 +1,6 @@
 import { ReactComponent as Logo } from "../illustrations/Logo.svg";
 import { Account } from "../components";
 import M3Typography from "../M3Typography";
-import Nav from "../components/Nav";
 
 const Connect = ({ web3Modal, loadWeb3Modal }) => {
   return (
@@ -20,7 +19,6 @@ const Connect = ({ web3Modal, loadWeb3Modal }) => {
       <div>
         <Account web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} buttonVariant="filled" />
       </div>
-      <Nav />
     </div>
   );
 };

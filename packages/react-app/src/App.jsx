@@ -293,7 +293,7 @@ const App = props => {
         USE_NETWORK_SELECTOR={USE_NETWORK_SELECTOR}
       />
       <Main>
-        <Nav />
+        {isConnected && <Nav />}
         {!isConnected && <Redirect to="/connect" />}
         <Switch>
           <Route exact path="/">
