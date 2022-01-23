@@ -10,7 +10,7 @@ import {
 } from "eth-hooks";
 import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, Route, Switch, useLocation } from "react-router-dom";
+import { Link, Redirect, Route, Switch, useLocation } from "react-router-dom";
 import "./App.css";
 import {
   Account,
@@ -35,6 +35,11 @@ import styled from "styled-components";
 import Connect from "./views/Connect";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import Main from "./components/Main";
+import ButtonsDemo from "./views/ButtonsDemo";
+import YourBadge from "./views/YourBadge";
+import HallOfFame from "./views/HallOfFame";
+import Relay from "./views/Relay";
+import { useIsConnected } from "./hooks/useIsConnected";
 
 const { ethers } = require("ethers");
 /*
@@ -255,10 +260,13 @@ const App = props => {
     }
   }, [loadWeb3Modal]);
 
+  const isConnected = useIsConnected(web3Modal);
+
   const faucetAvailable = localProvider && localProvider.connection && targetNetwork.name.indexOf("local") !== -1;
   return (
     <StyledRoot currentTheme={currentTheme}>
       <Header
+        web3Modal={web3Modal}
         account={
           <Account
             useBurner={false}
@@ -271,6 +279,7 @@ const App = props => {
             loadWeb3Modal={loadWeb3Modal}
             logoutOfWeb3Modal={logoutOfWeb3Modal}
             blockExplorer={blockExplorer}
+            buttonVariant="outline"
           />
         }
       />
@@ -283,9 +292,25 @@ const App = props => {
         USE_NETWORK_SELECTOR={USE_NETWORK_SELECTOR}
       />
       <Main>
+        {!isConnected && <Redirect to="/connect" />}
         <Switch>
           <Route exact path="/">
-            <Connect />
+            {isConnected ? <Redirect to="/badge" /> : <Redirect to="/connect" />}
+          </Route>
+          <Route exact path="/connect">
+            {!isConnected ? <Connect web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} /> : <Redirect to="/" />}
+          </Route>
+          <Route exact path="/badge">
+            <YourBadge />
+          </Route>
+          <Route exact path="/hall">
+            <HallOfFame />
+          </Route>
+          <Route exact path="/relay">
+            <Relay />
+          </Route>
+          <Route exact path="/demo">
+            <ButtonsDemo />
           </Route>
           <Route path="/se">
             <Menu style={{ textAlign: "center", marginTop: 40 }} selectedKeys={[location.pathname]} mode="horizontal">
