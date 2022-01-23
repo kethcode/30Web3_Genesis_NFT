@@ -23,6 +23,7 @@ import {
   NetworkDisplay,
   FaucetHint,
   NetworkSwitch,
+  Nav,
 } from "./components";
 import { NETWORKS, ALCHEMY_KEY } from "./constants";
 import externalContracts from "./contracts/external_contracts";
@@ -35,7 +36,7 @@ import styled from "styled-components";
 import Connect from "./views/Connect";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import Main from "./components/Main";
-import ButtonsDemo from "./views/ButtonsDemo";
+import Demo from "./views/Demo";
 import YourBadge from "./views/YourBadge";
 import HallOfFame from "./views/HallOfFame";
 import Relay from "./views/Relay";
@@ -292,6 +293,7 @@ const App = props => {
         USE_NETWORK_SELECTOR={USE_NETWORK_SELECTOR}
       />
       <Main>
+        <Nav />
         {!isConnected && <Redirect to="/connect" />}
         <Switch>
           <Route exact path="/">
@@ -310,7 +312,7 @@ const App = props => {
             <Relay />
           </Route>
           <Route exact path="/demo">
-            <ButtonsDemo />
+            <Demo />
           </Route>
           <Route path="/se">
             <Menu style={{ textAlign: "center", marginTop: 40 }} selectedKeys={[location.pathname]} mode="horizontal">

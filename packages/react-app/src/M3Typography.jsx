@@ -3,11 +3,13 @@ import assert from "assert";
 import styled from "styled-components";
 import theme from "./themes/theme";
 import { useThemeSwitcher } from "react-css-theme-switcher";
-const fonts = theme.fonts;
-const fontTokens = fonts.map(f => f.id);
+const fontTokens = theme.fonts;
+const fontTokenIds = fontTokens.map(f => f.id);
+const colorTokens = theme.colors;
+const colorTokenIds = colorTokens.map(c => c.id);
 
-const tokenToBaseComponent = token => {
-  assert(fontTokens.includes(token), `Invalid token ${token} provided. Should be one of ${fontTokens}`);
+const tokenToBaseComponent = fontTokenId => {
+  assert(fontTokenIds.includes(fontTokenId), `Invalid token ${fontTokenId} provided. Should be one of ${fontTokenIds}`);
   const FONT_TAG_TO_BASE_COMPONENT = {
     "display-large": styled.h1,
     "display-medium": styled.h1,
@@ -25,7 +27,7 @@ const tokenToBaseComponent = token => {
     "label-medium": styled.span,
     "label-small": styled.span,
   };
-  const font = fonts.find(f => f.id === token);
+  const font = fontTokens.find(f => f.id === fontTokenId);
   const fontTag = font.tags[0];
   return FONT_TAG_TO_BASE_COMPONENT[fontTag];
 };
@@ -35,17 +37,17 @@ const WEIGH_LABEL_TO_WEIGHT = {
   Medium: 500,
 };
 
-const M3Typography = ({ token, children, ...props }) => {
+const M3Typography = ({ fontTokenId, colorTokenId, children, ...props }) => {
   const { currentTheme } = useThemeSwitcher();
   const colorMode = currentTheme ?? "light";
 
-  const Styled = tokenToBaseComponent(token)`
-  color: ${props => props.theme.get("md.sys.color.on-background", props.colorMode)};
-  font-family: ${props => props.theme.get(`${token}.font`)};
-  line-height: ${props => props.theme.get(`${token}.line-height`)}px;
-  font-weight: ${props => WEIGH_LABEL_TO_WEIGHT[props.theme.get(`${token}.weight`)]};
-  font-size: ${props => props.theme.get(`${token}.size`)}px;
-  letter-spacing: ${props => props.theme.get(`${token}.tracking`)};
+  const Styled = tokenToBaseComponent(fontTokenId)`
+  color: ${props => props.theme.get(colorTokenId, props.colorMode)};
+  font-family: ${props => props.theme.get(`${fontTokenId}.font`)};
+  line-height: ${props => props.theme.get(`${fontTokenId}.line-height`)}px;
+  font-weight: ${props => WEIGH_LABEL_TO_WEIGHT[props.theme.get(`${fontTokenId}.weight`)]};
+  font-size: ${props => props.theme.get(`${fontTokenId}.size`)}px;
+  letter-spacing: ${props => props.theme.get(`${fontTokenId}.tracking`)};
 `;
 
   return (
@@ -56,11 +58,13 @@ const M3Typography = ({ token, children, ...props }) => {
 };
 
 M3Typography.propTypes = {
-  token: PropTypes.oneOf(fontTokens),
+  fontTokenId: PropTypes.oneOf(fontTokenIds),
+  colorTokenId: PropTypes.oneOf(colorTokenIds),
 };
 
 M3Typography.defaultProps = {
-  token: "md.sys.typescale.body-medium",
+  fontTokenId: "md.sys.typescale.body-medium",
+  colorTokenId: "md.sys.color.on-background",
 };
 
 export default M3Typography;

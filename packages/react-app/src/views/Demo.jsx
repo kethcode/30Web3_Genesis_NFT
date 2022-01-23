@@ -1,7 +1,7 @@
 import React from "react";
 import M3Button from "../components/M3Button";
 
-const ButtonsDemo = () => {
+const Demo = () => {
   return (
     <div style={{ width: "100%" }}>
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem", margin: "2rem" }}>
@@ -55,4 +55,4 @@ const ButtonsDemo = () => {
   );
 };
 
-export default ButtonsDemo;
+export default Demo;

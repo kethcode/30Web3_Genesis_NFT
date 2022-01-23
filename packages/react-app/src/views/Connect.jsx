@@ -1,6 +1,7 @@
 import { ReactComponent as Logo } from "../illustrations/Logo.svg";
 import { Account } from "../components";
 import M3Typography from "../M3Typography";
+import Nav from "../components/Nav";
 
 const Connect = ({ web3Modal, loadWeb3Modal }) => {
   return (
@@ -15,10 +16,11 @@ const Connect = ({ web3Modal, loadWeb3Modal }) => {
       }}
     >
       <Logo width="17rem" />
-      <M3Typography token="md.sys.typescale.headline-large">Welcome, buidler</M3Typography>
+      <M3Typography fontTokenId="md.sys.typescale.headline-large">Welcome, buidler</M3Typography>
       <div>
         <Account web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} buttonVariant="filled" />
       </div>
+      <Nav />
     </div>
   );
 };
