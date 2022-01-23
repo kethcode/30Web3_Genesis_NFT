@@ -6,7 +6,7 @@ import elevations from "./elevations.json";
 
 const COLOR_MODES = ["light", "dark"];
 
-const getToken = (theme, id, colorMode) => {
+const getToken = (theme, id, colorMode = "light") => {
   assert(
     COLOR_MODES.includes(colorMode),
     `Unknown color mode ${colorMode} passed. Please provide on of 'light' or 'dark'`,

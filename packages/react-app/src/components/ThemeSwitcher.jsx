@@ -11,8 +11,9 @@ export default function ThemeSwitcher() {
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-    switcher({ theme: theme });
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    switcher({ theme: newTheme });
   };
 
   return (
@@ -21,9 +22,9 @@ export default function ThemeSwitcher() {
       onClick={toggleTheme}
       icon={
         theme === "light" ? (
-          <span class="material-icons">light_mode</span>
+          <span className="material-icons">light_mode</span>
         ) : (
-          <span class="material-icons">dark_mode</span>
+          <span className="material-icons">dark_mode</span>
         )
       }
     />

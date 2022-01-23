@@ -3,7 +3,7 @@ import M3Button from "../components/M3Button";
 
 const ButtonsDemo = () => {
   return (
-    <div style={{ width: "100vw", height: "100vh" }}>
+    <div style={{ width: "100%" }}>
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem", margin: "2rem" }}>
         <div style={{ display: "flex", gap: "1rem" }}>
           <M3Button variant="filled">Filled button</M3Button>
