@@ -6,8 +6,9 @@ const StyledRoot = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  padding: 3rem;
 `;
 
 const Main = ({ children }) => {

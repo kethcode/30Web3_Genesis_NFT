@@ -293,7 +293,6 @@ const App = props => {
         USE_NETWORK_SELECTOR={USE_NETWORK_SELECTOR}
       />
       <Main>
-        {isConnected && <Nav />}
         {!isConnected && <Redirect to="/connect" />}
         <Switch>
           <Route exact path="/">
@@ -303,7 +302,7 @@ const App = props => {
             {!isConnected ? <Connect web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} /> : <Redirect to="/" />}
           </Route>
           <Route exact path="/badge">
-            <YourBadge />
+            <YourBadge gasPrice={gasPrice} />
           </Route>
           <Route exact path="/hall">
             <HallOfFame />
@@ -342,7 +341,7 @@ const App = props => {
               </Route>
               <Route exact path="/se/debug">
                 <Contract
-                  name="YourContract"
+                  name="NFT30Web3"
                   price={price}
                   signer={userSigner}
                   provider={localProvider}
@@ -477,6 +476,7 @@ const App = props => {
             </div>
           </Route>
         </Switch>
+        {isConnected && <Nav />}
       </Main>
     </StyledRoot>
   );

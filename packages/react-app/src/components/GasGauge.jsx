@@ -1,5 +1,6 @@
 import { Button } from "antd";
 import React from "react";
+import M3Button from "./M3Button";
 
 // added display of 0 instead of NaN if gas price is not provided
 
@@ -21,19 +22,14 @@ import React from "react";
 
 export default function GasGauge(props) {
   return (
-    <Button
+    <M3Button
+      variant="text"
+      icon={<span className="material-icons">local_gas_station</span>}
       onClick={() => {
         window.open("https://ethgasstation.info/");
       }}
-      size="large"
-      shape="round"
     >
-      <span style={{ marginRight: 8 }}>
-        <span role="img" aria-label="fuelpump">
-          ⛽️
-        </span>
-      </span>
       {typeof props.gasPrice === "undefined" ? 0 : parseInt(props.gasPrice, 10) / 10 ** 9}g
-    </Button>
+    </M3Button>
   );
 }
