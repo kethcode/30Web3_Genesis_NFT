@@ -19,11 +19,14 @@ contract NFT30Web3 is LilOwnable, ERC721 {
 
     uint256 public totalSupply;
     mapping(uint256 => address) public minterOf;
+    mapping(address => bool) public claimed;
 
     constructor() payable ERC721("30Web3 Genesis", "30Web3_1") {}
 
-    function mint() external payable {        
+    function mint() external payable {      
+        require(claimed[msg.sender] == false, "Already Claimed");  
         _mint(msg.sender, totalSupply);
+        claimed[msg.sender] = true;
         minterOf[totalSupply] = ownerOf[totalSupply];
         totalSupply++;
     }
@@ -41,6 +44,10 @@ contract NFT30Web3 is LilOwnable, ERC721 {
         );
 
         return buildSvg("30Web3 Genesis","30Web3_1",svgString);
+    }
+
+    function ownsNFT() public view returns (bool) {
+        return claimed[msg.sender];
     }
 
     //https://ethereum.stackexchange.com/questions/8346/convert-address-to-string
