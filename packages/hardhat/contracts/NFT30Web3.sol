@@ -16,15 +16,14 @@ import "@rari-capital/solmate/src/utils/SafeTransferLib.sol";
 error DoesNotExist();
 
 contract NFT30Web3 is LilOwnable, ERC721 {
-
     uint256 public totalSupply;
     mapping(uint256 => address) public minterOf;
     mapping(address => bool) public claimed;
 
     constructor() payable ERC721("30Web3 Genesis", "30Web3_1") {}
 
-    function mint() external payable {      
-        require(claimed[msg.sender] == false, "Already Claimed");  
+    function mint() external payable {
+        require(claimed[msg.sender] == false, "Already Claimed");
         _mint(msg.sender, totalSupply);
         claimed[msg.sender] = true;
         minterOf[totalSupply] = ownerOf[totalSupply];
@@ -43,7 +42,7 @@ contract NFT30Web3 is LilOwnable, ERC721 {
             )
         );
 
-        return buildSvg("30Web3 Genesis","30Web3_1",svgString);
+        return buildSvg("30Web3 Genesis", "30Web3_1", svgString);
     }
 
     function ownsNFT() public view returns (bool) {
@@ -53,18 +52,21 @@ contract NFT30Web3 is LilOwnable, ERC721 {
     //https://ethereum.stackexchange.com/questions/8346/convert-address-to-string
     function toAsciiString(address x) internal pure returns (string memory) {
         bytes memory s = new bytes(40);
-        for (uint i = 0; i < 20; i++) {
-            bytes1 b = bytes1(uint8(uint(uint160(x)) / (2**(8*(19 - i)))));
+        for (uint256 i = 0; i < 20; i++) {
+            bytes1 b = bytes1(uint8(uint256(uint160(x)) / (2**(8 * (19 - i)))));
             bytes1 hi = bytes1(uint8(b) / 16);
             bytes1 lo = bytes1(uint8(b) - 16 * uint8(hi));
-            s[2*i] = char(hi);
-            s[2*i+1] = char(lo);            
+            s[2 * i] = char(hi);
+            s[2 * i + 1] = char(lo);
         }
         return string(s);
     }
 
-    function buildSvg(string memory nftName, string memory nftDescription, string memory svgString) public pure returns (string memory)
-    {
+    function buildSvg(
+        string memory nftName,
+        string memory nftDescription,
+        string memory svgString
+    ) public pure returns (string memory) {
         // console.log("\n--------------------");
         // console.log(svgString);
         // console.log("--------------------\n");
@@ -74,12 +76,24 @@ contract NFT30Web3 is LilOwnable, ERC721 {
         // console.log(imgEncoded);
         // console.log("--------------------\n");
 
-        string memory imgURI = string(abi.encodePacked('data:image/svg+xml;base64,', imgEncoded));
+        string memory imgURI = string(
+            abi.encodePacked("data:image/svg+xml;base64,", imgEncoded)
+        );
         // console.log("\n--------------------");
         // console.log(imgURI);
         // console.log("--------------------\n");
 
-        string memory nftJson = string(abi.encodePacked('{"name": "', nftName, '", "description": "', nftDescription, '", "image": "', imgURI, '"}'));
+        string memory nftJson = string(
+            abi.encodePacked(
+                '{"name": "',
+                nftName,
+                '", "description": "',
+                nftDescription,
+                '", "image": "',
+                imgURI,
+                '"}'
+            )
+        );
         // console.log("\n--------------------");
         // console.log(nftJson);
         // console.log("--------------------\n");
@@ -89,14 +103,15 @@ contract NFT30Web3 is LilOwnable, ERC721 {
         // console.log(nftEncoded);
         // console.log("--------------------\n");
 
-        string memory finalURI = string(abi.encodePacked("data:application/json;base64,", nftEncoded));
+        string memory finalURI = string(
+            abi.encodePacked("data:application/json;base64,", nftEncoded)
+        );
         // console.log("\n--------------------");
         // console.log(finalURI);
         // console.log("--------------------\n");
 
         return finalURI;
     }
-
 
     function char(bytes1 b) internal pure returns (bytes1 c) {
         if (uint8(b) < 10) return bytes1(uint8(b) + 0x30);
@@ -166,11 +181,20 @@ library Base64 {
                 let input := mload(dataPtr)
 
                 // write 4 characters
-                mstore8(resultPtr, mload(add(tablePtr, and(shr(18, input), 0x3F))))
+                mstore8(
+                    resultPtr,
+                    mload(add(tablePtr, and(shr(18, input), 0x3F)))
+                )
                 resultPtr := add(resultPtr, 1)
-                mstore8(resultPtr, mload(add(tablePtr, and(shr(12, input), 0x3F))))
+                mstore8(
+                    resultPtr,
+                    mload(add(tablePtr, and(shr(12, input), 0x3F)))
+                )
                 resultPtr := add(resultPtr, 1)
-                mstore8(resultPtr, mload(add(tablePtr, and(shr(6, input), 0x3F))))
+                mstore8(
+                    resultPtr,
+                    mload(add(tablePtr, and(shr(6, input), 0x3F)))
+                )
                 resultPtr := add(resultPtr, 1)
                 mstore8(resultPtr, mload(add(tablePtr, and(input, 0x3F))))
                 resultPtr := add(resultPtr, 1)

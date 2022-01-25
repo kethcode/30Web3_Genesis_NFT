@@ -63,14 +63,18 @@ const YourBadge = ({ address, gasPrice, tx, readContracts, writeContracts }) => 
     console.log(await result);
   };
 
-  return !address ? (
-    <div>Loading...</div>
-  ) : hasNft ? (
-    <div>A sexy NFT</div>
-  ) : hasNftClaimable ? (
-    <HasNftClaimable gasPrice={gasPrice} tx={tx} onClaim={handleClaim} />
-  ) : (
-    <div>Sorry, no NFT for you</div>
+  return (
+    <div style={{ height: "100%", display: "flex", alignItems: "center" }}>
+      {!address ? (
+        <div>Loading...</div>
+      ) : hasNft ? (
+        <NFT address={address} readContracts={readContracts} />
+      ) : hasNftClaimable ? (
+        <HasNftClaimable gasPrice={gasPrice} tx={tx} onClaim={handleClaim} />
+      ) : (
+        <div>Sorry, no NFT for you</div>
+      )}
+    </div>
   );
 };
 

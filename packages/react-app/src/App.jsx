@@ -41,8 +41,6 @@ import YourBadge from "./views/YourBadge";
 import HallOfFame from "./views/HallOfFame";
 import Relay from "./views/Relay";
 import { useIsConnected } from "./hooks/useIsConnected";
-import { useHasNft } from "./hooks/useHasNft";
-import { useHasNftClaimable } from "./hooks/useHasNftClaimable";
 
 const { ethers } = require("ethers");
 /*
