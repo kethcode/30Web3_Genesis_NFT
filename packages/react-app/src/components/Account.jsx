@@ -1,5 +1,5 @@
 import React from "react";
-import { useIsConnected } from "../hooks/useIsConnected";
+import useIsConnected from "../hooks/useIsConnected";
 import Address from "./Address";
 // import Balance from "./Balance";
 import M3Button from "./M3Button";

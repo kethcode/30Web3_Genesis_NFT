@@ -1,6 +1,8 @@
 // import { useContractReader } from "eth-hooks";
 
-export const useHasNftClaimable = (address, readContracts) => {
+const useHasNftClaimable = (address, readContracts) => {
   const has = true;
   return has;
 };
+
+export default useHasNftClaimable;

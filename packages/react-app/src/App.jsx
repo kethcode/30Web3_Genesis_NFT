@@ -40,7 +40,7 @@ import Demo from "./views/Demo";
 import YourBadge from "./views/YourBadge";
 import HallOfFame from "./views/HallOfFame";
 import Relay from "./views/Relay";
-import { useIsConnected } from "./hooks/useIsConnected";
+import useIsConnected from "./hooks/useIsConnected";
 
 const { ethers } = require("ethers");
 /*
@@ -68,7 +68,7 @@ const initialNetwork = NETWORKS.localhost; // <------- select your target fronte
 // 😬 Sorry for all the console logging
 const DEBUG = true;
 const NETWORKCHECK = true;
-const USE_BURNER_WALLET = true; // toggle burner wallet feature
+const USE_BURNER_WALLET = false; // toggle burner wallet feature
 const USE_NETWORK_SELECTOR = true;
 
 const web3Modal = Web3ModalSetup();
@@ -186,7 +186,9 @@ const App = props => {
   ]);
 
   // keep track of a variable from the contract in the local React state:
-  const purpose = useContractReader(readContracts, "YourContract", "purpose");
+  const symbol = useContractReader(readContracts, "NFT30Web3", "symbol");
+  console.log("symbol 🍎🍎🍎🍎🍎🍎", symbol);
+
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
   console.log("🏷 Resolved austingriffith.eth as:",addressFromENS)
@@ -374,7 +376,7 @@ const App = props => {
                   tx={tx}
                   writeContracts={writeContracts}
                   readContracts={readContracts}
-                  purpose={purpose}
+                  purpose={symbol}
                 />
               </Route>
               <Route path="/se/mainnetdai">

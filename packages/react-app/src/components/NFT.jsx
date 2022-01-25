@@ -11,7 +11,7 @@ const Styled = styled(motion.div)`
   aspect-ratio: 320 / 240;
   background: ${props => props.theme.get("md.sys.color.surface-variant", props.colorMode)};
   border-radius: 12px;
-  box-shadow: ${props => props.theme.get("md.sys.elevation.level1", props.colorMode)};
+  box-shadow: ${props => props.theme.get("md.sys.elevation.level5", props.colorMode)};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,11 +22,6 @@ const Base = ({ children, colorMode }) => (
     colorMode={colorMode}
     whileHover={{
       scale: 1.05,
-      //   perspective: "800px",
-      //   rotateY: "-15deg",
-      //   translateY: "-50px",
-      //   rotateX: "10deg",
-      //   transform: "perspective(800px) rotateY(-15deg) translateY(-50px) rotateX(10deg) scale(1)",
     }}
   >
     {children}

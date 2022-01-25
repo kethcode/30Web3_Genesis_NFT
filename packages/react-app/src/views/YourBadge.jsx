@@ -1,11 +1,11 @@
 import { GasGauge } from "../components";
 import M3Button from "../components/M3Button";
 import NFT from "../components/NFT";
-import { useHasNft } from "../hooks/useHasNft";
-import { useHasNftClaimable } from "../hooks/useHasNftClaimable";
+import useHasNft from "../hooks/useHasNft";
+import useHasNftClaimable from "../hooks/useHasNftClaimable";
 import M3Typography from "../M3Typography";
 
-const HasNftClaimable = ({ gasPrice, onClaim }) => (
+const NftClaimable = ({ gasPrice, onClaim }) => (
   <div
     style={{
       display: "flex",
@@ -38,7 +38,7 @@ const HasNftClaimable = ({ gasPrice, onClaim }) => (
   </div>
 );
 
-const YourBadge = ({ address, gasPrice, tx, readContracts, writeContracts }) => {
+const YourBadgeBase = ({ address, gasPrice, tx, readContracts, writeContracts }) => {
   const hasNft = useHasNft(address, readContracts);
 
   const hasNftClaimable = useHasNftClaimable(address, readContracts);
@@ -63,16 +63,28 @@ const YourBadge = ({ address, gasPrice, tx, readContracts, writeContracts }) => 
     console.log(await result);
   };
 
+  if (hasNft) {
+    return <NFT address={address} readContracts={readContracts} />;
+  } else if (hasNftClaimable) {
+    return <NftClaimable gasPrice={gasPrice} tx={tx} onClaim={handleClaim} />;
+  } else {
+    return <div>Sorry, no NFT for you</div>;
+  }
+};
+
+const YourBadge = ({ address, gasPrice, tx, readContracts, writeContracts }) => {
   return (
     <div style={{ height: "100%", display: "flex", alignItems: "center" }}>
       {!address ? (
         <div>Loading...</div>
-      ) : hasNft ? (
-        <NFT address={address} readContracts={readContracts} />
-      ) : hasNftClaimable ? (
-        <HasNftClaimable gasPrice={gasPrice} tx={tx} onClaim={handleClaim} />
       ) : (
-        <div>Sorry, no NFT for you</div>
+        <YourBadgeBase
+          address={address}
+          gasPrice={gasPrice}
+          tx={tx}
+          readContracts={readContracts}
+          writeContracts={writeContracts}
+        />
       )}
     </div>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useIsConnected } from "../hooks/useIsConnected";
+import useIsConnected from "../hooks/useIsConnected";
 import { ReactComponent as Logo } from "../illustrations/Logo.svg";
 import ThemeSwitcher from "./ThemeSwitcher";
 
