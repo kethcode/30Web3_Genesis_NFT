@@ -41,6 +41,8 @@ import YourBadge from "./views/YourBadge";
 import HallOfFame from "./views/HallOfFame";
 import Relay from "./views/Relay";
 import { useIsConnected } from "./hooks/useIsConnected";
+import { useHasNft } from "./hooks/useHasNft";
+import { useHasNftClaimable } from "./hooks/useHasNftClaimable";
 
 const { ethers } = require("ethers");
 /*
@@ -191,9 +193,6 @@ const App = props => {
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
   console.log("🏷 Resolved austingriffith.eth as:",addressFromENS)
   */
-
-  //   const hasNft = useHasNft(address, readContracts);
-  //   const hasNftClaimable = useHasNftClaimable(address, readContracts);
 
   //
   // 🧫 DEBUG 👨🏻‍🔬

@@ -39,9 +39,9 @@ const HasNftClaimable = ({ gasPrice, onClaim }) => (
 );
 
 const YourBadge = ({ address, gasPrice, tx, readContracts, writeContracts }) => {
-  const hasNftClaimable = useHasNftClaimable(address, readContracts);
-
   const hasNft = useHasNft(address, readContracts);
+
+  const hasNftClaimable = useHasNftClaimable(address, readContracts);
 
   const handleClaim = async () => {
     const result = tx(writeContracts.NFT30Web3.mint(), update => {
@@ -63,10 +63,12 @@ const YourBadge = ({ address, gasPrice, tx, readContracts, writeContracts }) => 
     console.log(await result);
   };
 
-  return hasNftClaimable ? (
-    <HasNftClaimable gasPrice={gasPrice} tx={tx} onClaim={handleClaim} />
+  return !address ? (
+    <div>Loading...</div>
   ) : hasNft ? (
     <div>A sexy NFT</div>
+  ) : hasNftClaimable ? (
+    <HasNftClaimable gasPrice={gasPrice} tx={tx} onClaim={handleClaim} />
   ) : (
     <div>Sorry, no NFT for you</div>
   );
