@@ -187,11 +187,13 @@ const App = props => {
 
   // keep track of a variable from the contract in the local React state:
   const purpose = useContractReader(readContracts, "YourContract", "purpose");
-
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
   console.log("🏷 Resolved austingriffith.eth as:",addressFromENS)
   */
+
+  //   const hasNft = useHasNft(address, readContracts);
+  //   const hasNftClaimable = useHasNftClaimable(address, readContracts);
 
   //
   // 🧫 DEBUG 👨🏻‍🔬
@@ -302,7 +304,13 @@ const App = props => {
             {!isConnected ? <Connect web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} /> : <Redirect to="/" />}
           </Route>
           <Route exact path="/badge">
-            <YourBadge gasPrice={gasPrice} />
+            <YourBadge
+              address={address}
+              gasPrice={gasPrice}
+              tx={tx}
+              readContracts={readContracts}
+              writeContracts={writeContracts}
+            />
           </Route>
           <Route exact path="/hall">
             <HallOfFame />
