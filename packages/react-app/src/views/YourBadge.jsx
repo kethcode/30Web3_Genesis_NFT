@@ -1,3 +1,5 @@
+import { Spin } from "antd";
+import PropTypes from "prop-types";
 import { GasGauge } from "../components";
 import M3Button from "../components/M3Button";
 import NFT from "../components/NFT";
@@ -38,11 +40,9 @@ const NftClaimable = ({ gasPrice, onClaim }) => (
   </div>
 );
 
-const YourBadgeBase = ({ address, gasPrice, tx, readContracts, writeContracts }) => {
+const YourBadgeBase = ({ address, gasPrice, tx, readContracts, writeContracts, localProvider }) => {
   const hasNft = useHasNft(address, readContracts);
-
   const hasNftClaimable = useHasNftClaimable(address, readContracts);
-
   const handleClaim = async () => {
     const result = tx(writeContracts.NFT30Web3.mint(), update => {
       console.log("📡 Transaction Update:", update);
@@ -63,30 +63,33 @@ const YourBadgeBase = ({ address, gasPrice, tx, readContracts, writeContracts })
     console.log(await result);
   };
 
-  if (hasNft) {
-    return <NFT address={address} readContracts={readContracts} />;
-  } else if (hasNftClaimable) {
-    return <NftClaimable gasPrice={gasPrice} tx={tx} onClaim={handleClaim} />;
-  } else {
-    return <div>Sorry, no NFT for you</div>;
-  }
+  return typeof hasNft === "undefined" ? (
+    <Spin />
+  ) : hasNft ? (
+    <NFT address={address} readContracts={readContracts} localProvider={localProvider} />
+  ) : hasNftClaimable ? (
+    <NftClaimable gasPrice={gasPrice} tx={tx} onClaim={handleClaim} />
+  ) : (
+    <div>Sorry, no NFT for you</div>
+  );
 };
 
-const YourBadge = ({ address, gasPrice, tx, readContracts, writeContracts }) => {
-  return (
-    <div style={{ height: "100%", display: "flex", alignItems: "center" }}>
-      {!address ? (
-        <div>Loading...</div>
-      ) : (
-        <YourBadgeBase
-          address={address}
-          gasPrice={gasPrice}
-          tx={tx}
-          readContracts={readContracts}
-          writeContracts={writeContracts}
-        />
-      )}
-    </div>
+YourBadgeBase.propTypes = {
+  address: PropTypes.string.isRequired,
+};
+
+const YourBadge = ({ address, gasPrice, tx, readContracts, writeContracts, localProvider }) => {
+  return !address ? (
+    <Spin />
+  ) : (
+    <YourBadgeBase
+      address={address}
+      gasPrice={gasPrice}
+      tx={tx}
+      readContracts={readContracts}
+      writeContracts={writeContracts}
+      localProvider={localProvider}
+    />
   );
 };
 

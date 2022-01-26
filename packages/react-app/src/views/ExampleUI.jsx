@@ -155,8 +155,8 @@ export default function ExampleUI({
       */}
       <Events
         contracts={readContracts}
-        contractName="YourContract"
-        eventName="SetPurpose"
+        contractName="NFT30Web3"
+        eventName="Transfer"
         localProvider={localProvider}
         mainnetProvider={mainnetProvider}
         startBlock={1}
