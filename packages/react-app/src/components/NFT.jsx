@@ -19,13 +19,11 @@ const Styled = styled(motion.div)`
   align-items: center;
 `;
 
-const Base = ({ children, colorMode }) => (
+const Base = ({ children, colorMode, disableHoverEffect }) => (
   <Styled
     colorMode={colorMode}
-    layoutId="coucou"
-    layout
     whileHover={{
-      scale: 1.05,
+      scale: disableHoverEffect ? 1 : 1.05,
     }}
   >
     {children}
@@ -45,27 +43,47 @@ const LoadingNFT = () => (
 );
 
 // Lazily render underlying componentto prevent initial caching when address is undefined
-const IfAddress = ({ address, readContracts, localProvider }) =>
+const IfAddress = ({ address, readContracts, localProvider, disableHoverEffect }) =>
   address ? (
-    <NftIdLoader address={address} readContracts={readContracts} localProvider={localProvider} />
+    <NftIdLoader
+      address={address}
+      readContracts={readContracts}
+      localProvider={localProvider}
+      disableHoverEffect={disableHoverEffect}
+    />
   ) : (
     <LoadingNFT />
   );
 
 // Lazily call "useGetNftId" to prevent initial caching when address is undefined
-const NftIdLoader = ({ address, readContracts, localProvider }) => {
+const NftIdLoader = ({ address, readContracts, localProvider, disableHoverEffect }) => {
   const nftId = useGetNftId(address, readContracts, localProvider);
   return nftId >= 0 ? (
-    <NftLoader nftId={nftId} address={address} readContracts={readContracts} localProvider={localProvider} />
+    <NftLoader
+      nftId={nftId}
+      address={address}
+      readContracts={readContracts}
+      localProvider={localProvider}
+      disableHoverEffect={disableHoverEffect}
+    />
   ) : (
     <LoadingNFT />
   );
 };
 
 // Lazily call "useGetNft" to prevent initial caching when nftId is undefined
-const NftLoader = ({ nftId, readContracts }) => {
+const NftLoader = ({ nftId, readContracts, disableHoverEffect }) => {
   const nft = useGetNft(nftId, readContracts);
-  return nft ? <ClaimedNFT name={nft.name} description={nft.description} image={nft.image} /> : <LoadingNFT />;
+  return nft ? (
+    <ClaimedNFT
+      name={nft.name}
+      description={nft.description}
+      image={nft.image}
+      disableHoverEffect={disableHoverEffect}
+    />
+  ) : (
+    <LoadingNFT />
+  );
 };
 
 // Nudge the dimensions of the SVG to fit its based
@@ -75,24 +93,30 @@ const SvgToBaseAdapter = styled.img`
   width: 100%;
   transform: scaleX(1.07) scaleY(1.09);
 `;
-const ClaimedNFT = ({ name, description, image }) => (
-  <Base whileHover={{ scale: 1.05 }}>
+const ClaimedNFT = ({ name, description, image, disableHoverEffect }) => (
+  <Base disableHoverEffect={disableHoverEffect}>
     <SvgToBaseAdapter src={image} alt={name + ", " + description} />
   </Base>
 );
 
-const NFT = ({ mystery, address, readContracts, localProvider }) => {
+const NFT = ({ mystery, address, readContracts, localProvider, disableHoverEffect }) => {
   const { currentTheme } = useThemeSwitcher();
   const colorMode = currentTheme ?? "light";
   return mystery ? (
     <MysteryNFT colorMode={colorMode} />
   ) : (
-    <IfAddress address={address} readContracts={readContracts} localProvider={localProvider} />
+    <IfAddress
+      address={address}
+      readContracts={readContracts}
+      localProvider={localProvider}
+      disableHoverEffect={disableHoverEffect}
+    />
   );
 };
 
 NFT.defaultProps = {
   mystery: false,
+  disableHoverEffect: false,
 };
 
 export default NFT;

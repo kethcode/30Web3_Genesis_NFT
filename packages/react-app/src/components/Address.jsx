@@ -1,5 +1,6 @@
 import { Skeleton } from "antd";
 import React from "react";
+import PropTypes from "prop-types";
 import Blockies from "react-blockies";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { useLookupAddress } from "eth-hooks/dapps/ens";
@@ -29,7 +30,7 @@ const blockExplorerLink = (address, blockExplorer) => `${blockExplorer || "https
               (ex. by default "https://etherscan.io/" or for xdai "https://blockscout.com/poa/xdai/")
   - Provide fontSize={fontSize} to change the size of address text
 */
-export default function Address(props) {
+const Address = props => {
   const { currentTheme } = useThemeSwitcher();
   const address = props.value || props.address;
   const ens = useLookupAddress(props.ensProvider, address);
@@ -68,22 +69,23 @@ export default function Address(props) {
       </span>
     );
   }
-
+  console.log("etherscanLink", etherscanLink);
   return (
-    <M3Button
-      variant="outline"
-      icon={
-        <div style={{ borderRadius: "100px", overflow: "hidden", width: "24px", height: "24px" }}>
-          <Blockies seed={address.toLowerCase()} size={8} scale={3} />
-        </div>
-      }
-    >
-      {displayAddress}
-      {/* <span style={{ verticalAlign: "middle" }}> */}
+    <a href={etherscanLink} target="_blank" rel="noopener noreferrer">
+      <M3Button
+        variant={props.variant}
+        icon={
+          <div style={{ borderRadius: "100px", overflow: "hidden", width: "24px", height: "24px" }}>
+            <Blockies seed={address.toLowerCase()} size={8} scale={3} />
+          </div>
+        }
+      >
+        {displayAddress}
+        {/* <span style={{ verticalAlign: "middle" }}> */}
 
-      {/* </span> */}
-      {/* <span style={{ verticalAlign: "middle", paddingLeft: 5, fontSize: props.fontSize ? props.fontSize : 28 }}> */}
-      {/* {props.onChange ? (
+        {/* </span> */}
+        {/* <span style={{ verticalAlign: "middle", paddingLeft: 5, fontSize: props.fontSize ? props.fontSize : 28 }}> */}
+        {/* {props.onChange ? (
         <Typography editable={{ onChange: props.onChange }} copyable={{ text: address }}>
           <a
             // style={{ color: currentTheme === "light" ? "#222222" : "#ddd" }}
@@ -106,6 +108,17 @@ export default function Address(props) {
           </a>
         </Text>
       )} */}
-    </M3Button>
+      </M3Button>
+    </a>
   );
-}
+};
+
+M3Button.propTypes = {
+  variant: PropTypes.oneOf(["filled", "outline", "elevated", "text", "tonal"]),
+};
+
+Address.defaultProps = {
+  variant: "filled",
+};
+
+export default Address;

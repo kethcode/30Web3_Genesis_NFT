@@ -42,6 +42,7 @@ import HallOfFame from "./views/HallOfFame";
 import Relay from "./views/Relay";
 import useIsConnected from "./hooks/useIsConnected";
 import Content from "./components/Content";
+import useGetTransferEvents from "./hooks/useGetTransferEvents";
 
 const { ethers } = require("ethers");
 /*
@@ -189,6 +190,8 @@ const App = props => {
   // keep track of a variable from the contract in the local React state:
   const symbol = useContractReader(readContracts, "NFT30Web3", "symbol");
 
+  const transferEvents = useGetTransferEvents(readContracts, localProvider);
+
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
   console.log("🏷 Resolved austingriffith.eth as:",addressFromENS)
@@ -284,7 +287,7 @@ const App = props => {
             loadWeb3Modal={loadWeb3Modal}
             logoutOfWeb3Modal={logoutOfWeb3Modal}
             blockExplorer={blockExplorer}
-            buttonVariant="outline"
+            variant="outline"
           />
         }
       />
@@ -317,7 +320,12 @@ const App = props => {
               />
             </Route>
             <Route exact path="/hall">
-              <HallOfFame />
+              <HallOfFame
+                transferEvents={transferEvents}
+                readContracts={readContracts}
+                localProvider={localProvider}
+                mainnetProvider={mainnetProvider}
+              />
             </Route>
             <Route exact path="/relay">
               <Relay />

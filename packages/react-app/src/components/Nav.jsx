@@ -59,7 +59,7 @@ const variants = {
     opacity: 1,
   },
   inactive: {
-    transform: "scaleX(0.6)",
+    transform: "scaleX(0.4)",
     opacity: 0,
   },
 };
