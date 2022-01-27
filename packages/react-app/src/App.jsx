@@ -497,7 +497,7 @@ const App = props => {
             </Route>
           </Switch>
         </Content>
-        {isConnected && <Nav />}
+        {isConnected && <Nav address={address} readContracts={readContracts} />}
       </Main>
     </StyledRoot>
   );

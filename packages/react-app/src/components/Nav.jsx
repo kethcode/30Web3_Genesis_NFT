@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
+import PropTypes from "prop-types";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import useHasNftClaimable from "../hooks/useHasNftClaimable";
 import M3Typography from "../M3Typography";
 
 const ITEMS = [
@@ -100,7 +102,17 @@ const StateLayer = styled.div`
   }
 `;
 
-const NavItem = ({ label, icon, to, colorMode, isFirst, isLast }) => {
+const NotifPoint = styled.div`
+  position: absolute;
+  transform: translate(8px, -19px);
+  height: 6px;
+  width: 6px;
+  border-radius: 100%;
+  background: ${props => props.theme.get("md.sys.color.error", props.colorMode)};
+  outline: 1px solid ${props => props.theme.get("md.sys.color.secondary-container", props.colorMode)};
+`;
+
+const NavItem = ({ label, icon, to, colorMode, isFirst, isLast, hasNotif }) => {
   const location = useLocation();
   const active = location.pathname === to;
   return (
@@ -108,6 +120,7 @@ const NavItem = ({ label, icon, to, colorMode, isFirst, isLast }) => {
       <StateLayer active={active} colorMode={colorMode} isFirst={isFirst} isLast={isLast}>
         <NavItemStyled active={active} colorMode={colorMode}>
           <NavItemIcon icon={icon} active={active} colorMode={colorMode} />
+          {hasNotif && <NotifPoint colorMode={colorMode} />}
           <M3Typography
             fontTokenId="md.sys.typescale.label-medium"
             colorTokenId={active ? "md.sys.color.on-secondary-container" : "md.sys.color.on-surface"}
@@ -129,9 +142,11 @@ const Container = styled.span`
   gap: 0.5rem;
 `;
 
-const Nav = () => {
+const Nav = ({ address, readContracts }) => {
   const { currentTheme } = useThemeSwitcher();
   const colorMode = currentTheme ?? "light";
+  const hasNftClaimable = useHasNftClaimable(address, readContracts);
+
   return (
     <Container colorMode={colorMode}>
       {ITEMS.map((item, index) => (
@@ -143,10 +158,19 @@ const Nav = () => {
           colorMode={colorMode}
           isFirst={index === 0}
           isLast={index === ITEMS.length - 1}
+          hasNotif={hasNftClaimable && index === 0}
         />
       ))}
     </Container>
   );
+};
+
+Nav.propTypes = {
+  badgeClaimable: PropTypes.bool,
+};
+
+Nav.defaultProps = {
+  badgeClaimable: false,
 };
 
 export default Nav;
