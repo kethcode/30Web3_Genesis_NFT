@@ -15,11 +15,6 @@ const ITEMS = [
     icon: "emoji_events",
     to: "/hall",
   },
-  {
-    label: "Pass the baton",
-    icon: "skip_next",
-    to: "/relay",
-  },
 ];
 
 const NavItemStyled = styled.div`
