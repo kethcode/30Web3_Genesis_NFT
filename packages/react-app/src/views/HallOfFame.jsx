@@ -106,7 +106,9 @@ const HallOfFame = ({ transferEvents, readContracts, localProvider, mainnetProvi
       ))}
     </Container>
   ) : transferEvents && transferEvents.length === 0 ? (
-    <div>No owner yet! Be the first to mint :) </div>
+    <M3Typography fontTokenId="md.sys.typescale.title-large" colorTokenId="md.sys.color.on-background">
+      No owner yet! You'll be the first one to mint 😱
+    </M3Typography>
   ) : (
     <Spin />
   );
