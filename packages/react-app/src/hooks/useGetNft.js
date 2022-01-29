@@ -8,8 +8,11 @@ export const useGetNft = (id, readContracts) => {
   const content = nft.substring(29, nft.length - 1);
   // Decode
   const decoded = Buffer.from(content, "base64");
-  // The closing brackets disappears in the process for unknow reason...
-  const asString = decoded.toString();
+  // Somethimes the closing bracket disappears... Don't know why
+  let asString = decoded.toString();
+  if (asString[asString.length - 1] !== "}") {
+    asString += "}";
+  }
   // Parse
   const parsed = JSON.parse(asString);
   return parsed;

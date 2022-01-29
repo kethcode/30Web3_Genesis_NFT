@@ -36,7 +36,7 @@ contract NFT30Web3 is LilOwnable, Renderer, ERC721 {
 
     function tokenURI(uint256 id) public view override returns (string memory) {
         if (ownerOf[id] == address(0)) revert DoesNotExist();
-        string memory svgString = _render();
+        string memory svgString = _render(id);
         return buildSvg("30Web3 Genesis", "30Web3_1", svgString);
     }
 
