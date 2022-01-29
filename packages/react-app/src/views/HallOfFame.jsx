@@ -8,6 +8,7 @@ import M3Typography from "../M3Typography";
 
 const Container = styled(motion.ul)`
   width: 100%;
+  height: calc(100vh - 14.5rem);
   max-width: 68rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
@@ -17,7 +18,7 @@ const Container = styled(motion.ul)`
   margin: 0;
   list-style: none;
   padding: 0;
-  overflow: hidden;
+  overflow: scroll;
 `;
 
 const containerMotion = {

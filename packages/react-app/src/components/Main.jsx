@@ -6,9 +6,10 @@ const StyledRoot = styled.div`
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  padding: 3rem;
+  padding: 3rem 3rem 0px 3rem;
+  gap: 2rem;
 `;
 
 const Main = ({ children }) => {

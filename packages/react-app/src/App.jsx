@@ -300,6 +300,7 @@ const App = props => {
           logoutOfWeb3Modal={logoutOfWeb3Modal}
           USE_NETWORK_SELECTOR={USE_NETWORK_SELECTOR}
         />
+        {isConnected && <Nav address={address} readContracts={readContracts} />}
         <Content>
           {!isConnected && <Redirect to="/connect" />}
           <Switch>
@@ -497,7 +498,7 @@ const App = props => {
             </Route>
           </Switch>
         </Content>
-        {isConnected && <Nav address={address} readContracts={readContracts} />}
+        {/* {isConnected && <Nav address={address} readContracts={readContracts} />} */}
       </Main>
     </StyledRoot>
   );
