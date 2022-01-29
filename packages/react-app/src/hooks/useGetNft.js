@@ -8,7 +8,9 @@ export const useGetNft = (id, readContracts) => {
   const content = nft.substring(29, nft.length - 1);
   // Decode
   const decoded = Buffer.from(content, "base64");
+  // The closing brackets disappears in the process for unknow reason...
+  const asString = decoded.toString();
   // Parse
-  const parsed = JSON.parse(decoded);
+  const parsed = JSON.parse(asString);
   return parsed;
 };

@@ -13,9 +13,13 @@ import "@rari-capital/solmate/src/utils/SafeTransferLib.sol";
 // Thank you OpenZeppelin
 //import "@openzeppelin/contracts/utils/Strings.sol"; // kinda dont want to use Strings.  will replace later.
 
+// Thank you tangert
+// https://gist.github.com/tangert/1eceaf04f2877d84fb0e10681b39d7e3#file-renderer-sol
+import "./Renderer.sol";
+
 error DoesNotExist();
 
-contract NFT30Web3 is LilOwnable, ERC721 {
+contract NFT30Web3 is LilOwnable, Renderer, ERC721 {
     uint256 public totalSupply;
     mapping(uint256 => address) public minterOf;
     mapping(address => bool) public claimed;
@@ -32,16 +36,7 @@ contract NFT30Web3 is LilOwnable, ERC721 {
 
     function tokenURI(uint256 id) public view override returns (string memory) {
         if (ownerOf[id] == address(0)) revert DoesNotExist();
-
-        string memory svgString = string(
-            abi.encodePacked(
-                "<svg width='320' height='240' viewBox='0 0 320 240' fill='none' xmlns='http://www.w3.org/2000/svg'><rect x='10' y='10' width='300' height='220' rx='12' ry='12' fill='lightsteelblue'/><circle cx='70' cy='50' r='30' fill='white' fill-opacity='0.8'/><circle cx='50' cy='50' r='30' fill='deeppink' fill-opacity='0.8'/><circle cx='60' cy='50' r='20' fill='darkviolet' fill-opacity='0.8'/><text x='45' y='54' fill='white' font-size='12px' font-family='monospace'>30W3</text><text x='160' y='60' fill='yellow' font-size='24px' font-family='monospace'>Genesis</text><text x='160' y='150' fill='darkorchid' font-size='28px' font-family='monospace' text-anchor='middle' opacity='0.9'>Web3 Buidloooor</text><text x='50%' y='90%' fill='black' font-size='10px' font-family='monospace' text-anchor='middle'><animate attributeName='x' values='45%;55%;45%' dur='4s' repeatCount='indefinite' />",
-                "0x",
-                toAsciiString(minterOf[id]),
-                "</text></svg>"
-            )
-        );
-
+        string memory svgString = _render();
         return buildSvg("30Web3 Genesis", "30Web3_1", svgString);
     }
 
