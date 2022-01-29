@@ -1,6 +1,6 @@
 <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="0.5" y="3.5" width="496" height="496" rx="41.5" fill="#8F8F8F" stroke="#838383" />
-    <rect x="7.5" y="0.5" width="492" height="493" rx="41.5" fill="white" stroke="#C0C0C0" />
+    <rect x="7.5" y="0.5" width="492" height="493" rx="41.5" fill="#EFEFEF" stroke="#C0C0C0" />
     <text x="352" y="64" fill="url(#titleGradient)" font-size="48px" font-weight="900" line-height="58px" letter-spacing="-2px" font-family="Inter,Arial,Helvetica,Apple Color Emoji,Segoe UI Emoji,NotoColorEmoji,Noto Color Emoji,Segoe UI Symbol,Android Emoji,EmojiSymbols,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Noto Sans,sans-serif">30W3</text>
     <text x="34" y="442" fill="url(#graduationGradient)" font-size="28px" font-weight="800" line-height="29px" letter-spacing="-1px" font-family="Inter,Arial,Helvetica,Apple Color Emoji,Segoe UI Emoji,NotoColorEmoji,Noto Color Emoji,Segoe UI Symbol,Android Emoji,EmojiSymbols,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Noto Sans,sans-serif">Graduation</text>
     <text x="34" y="464" fill="#29295E" font-size="22px" font-weight="bold" line-height="22px" letter-spacing="-1px" font-family="Inter,Arial,Helvetica,Apple Color Emoji,Segoe UI Emoji,NotoColorEmoji,Noto Color Emoji,Segoe UI Symbol,Android Emoji,EmojiSymbols,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Noto Sans,sans-serif">January "22</text>

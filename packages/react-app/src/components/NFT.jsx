@@ -8,12 +8,12 @@ import M3Typography from "../M3Typography";
 
 const Styled = styled(motion.div)`
   width: 100%;
-  max-width: 320px;
-  max-height: 240px;
-  aspect-ratio: 320 / 240;
+  max-width: 18rem;
+  max-height: 18rem;
+  aspect-ratio: 1 / 1;
   background: ${props => props.theme.get("md.sys.color.surface-variant", props.colorMode)};
-  border-radius: 12px;
-  box-shadow: ${props => props.theme.get("md.sys.elevation.level5", props.colorMode)};
+  border-radius: 35px;
+  box-shadow: ${props => props.theme.get("md.sys.elevation.level3", props.colorMode)};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -86,12 +86,8 @@ const NftLoader = ({ nftId, readContracts, disableHoverEffect }) => {
   );
 };
 
-// Nudge the dimensions of the SVG to fit its based
-// in order to account for empty space around the
-// actual NFT
 const SvgToBaseAdapter = styled.img`
   width: 100%;
-  transform: scaleX(1.07) scaleY(1.09);
 `;
 const ClaimedNFT = ({ name, description, image, disableHoverEffect }) => (
   <Base disableHoverEffect={disableHoverEffect}>
@@ -105,12 +101,14 @@ const NFT = ({ mystery, address, readContracts, localProvider, disableHoverEffec
   return mystery ? (
     <MysteryNFT colorMode={colorMode} />
   ) : (
-    <IfAddress
-      address={address}
-      readContracts={readContracts}
-      localProvider={localProvider}
-      disableHoverEffect={disableHoverEffect}
-    />
+    <>
+      <IfAddress
+        address={address}
+        readContracts={readContracts}
+        localProvider={localProvider}
+        disableHoverEffect={disableHoverEffect}
+      />
+    </>
   );
 };
 

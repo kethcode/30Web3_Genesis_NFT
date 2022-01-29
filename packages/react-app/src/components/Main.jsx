@@ -9,7 +9,7 @@ const StyledRoot = styled.div`
   justify-content: flex-start;
   align-items: center;
   padding: 3rem 3rem 0px 3rem;
-  gap: 2rem;
+  gap: 4rem;
 `;
 
 const Main = ({ children }) => {

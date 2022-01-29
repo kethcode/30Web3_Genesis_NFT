@@ -1,5 +1,6 @@
 import { Spin } from "antd";
 import PropTypes from "prop-types";
+import styled from "styled-components";
 import { GasGauge } from "../components";
 import M3Button from "../components/M3Button";
 import NFT from "../components/NFT";
@@ -7,22 +8,31 @@ import useHasNft from "../hooks/useHasNft";
 import useHasNftClaimable from "../hooks/useHasNftClaimable";
 import M3Typography from "../M3Typography";
 
-const NftClaimable = ({ gasPrice, onClaim }) => (
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-      flexGrow: 1,
-      gap: "3rem",
-    }}
+const Base = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  gap: 3rem;
+`;
+
+const Title = ({ children }) => (
+  <M3Typography
+    fontTokenId="md.sys.typescale.title-large"
+    style={{ textAlign: "center", maxWidth: "42rem", height: "4rem" }}
   >
+    {children}
+  </M3Typography>
+);
+
+const NftClaimable = ({ gasPrice, onClaim }) => (
+  <>
+    <Title>
+      Nice! Your participation to 30-Web3 has awarded you a new NFT. Claim now to discover it and receive it in your
+      wallet 👀
+    </Title>
     <NFT mystery />
-    <M3Typography style={{ textAlign: "center", maxWidth: "30rem" }}>
-      Nice! Your participation to 30-Web3 has awarded you a new NFT badge. Claim now to discover it and receive it in
-      your wallet.
-    </M3Typography>
     <div
       style={{
         display: "flex",
@@ -37,7 +47,14 @@ const NftClaimable = ({ gasPrice, onClaim }) => (
       </M3Button>
       <GasGauge gasPrice={gasPrice} />
     </div>
-  </div>
+  </>
+);
+
+const NftClaimed = ({ address, readContracts, localProvider }) => (
+  <>
+    <Title>This NFT is your reward for completing the 30-Web3 challenge. Congratulations 🎉</Title>
+    <NFT address={address} readContracts={readContracts} localProvider={localProvider} />
+  </>
 );
 
 const YourBadgeBase = ({ address, gasPrice, tx, readContracts, writeContracts, localProvider }) => {
@@ -63,14 +80,18 @@ const YourBadgeBase = ({ address, gasPrice, tx, readContracts, writeContracts, l
     console.log(await result);
   };
 
-  return typeof hasNft === "undefined" ? (
-    <Spin />
-  ) : hasNft ? (
-    <NFT address={address} readContracts={readContracts} localProvider={localProvider} />
-  ) : hasNftClaimable ? (
-    <NftClaimable gasPrice={gasPrice} tx={tx} onClaim={handleClaim} />
-  ) : (
-    <div>Sorry, no NFT for you</div>
+  return (
+    <Base>
+      {typeof hasNft === "undefined" ? (
+        <Spin />
+      ) : hasNft ? (
+        <NftClaimed address={address} readContracts={readContracts} localProvider={localProvider} />
+      ) : hasNftClaimable ? (
+        <NftClaimable gasPrice={gasPrice} tx={tx} onClaim={handleClaim} />
+      ) : (
+        <div>Sorry, no NFT for you</div>
+      )}
+    </Base>
   );
 };
 

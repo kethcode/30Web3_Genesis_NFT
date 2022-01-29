@@ -12,7 +12,7 @@ const Container = styled(motion.ul)`
   max-width: 68rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-  align-items: center;
+  align-items: flex-start;
   justify-items: center;
   gap: 2rem;
   margin: 0;
@@ -41,7 +41,7 @@ const ItemStyles = styled(motion.li)`
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  border: 1px solid ${props => props.theme.get("md.sys.color.outline", props.colorMode)};
+  //   border: 1px solid ${props => props.theme.get("md.sys.color.outline", props.colorMode)};
   background: ${props => props.theme.get("md.sys.color.surface", props.colorMode)};
   border-radius: 12px;
 `;
