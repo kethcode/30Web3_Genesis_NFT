@@ -19,6 +19,7 @@ export default function ThemeSwitcher() {
   return (
     <M3Button
       variant="text"
+      onlyIcon
       onClick={toggleTheme}
       icon={
         theme === "light" ? (

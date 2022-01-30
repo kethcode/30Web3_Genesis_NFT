@@ -63,12 +63,22 @@ const Account = ({
       <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} variant={variant} />
       <M3Button
         variant="outline"
+        onlyIcon
+        aria-label="Logout"
         onClick={logoutOfWeb3Modal}
         icon={<span className="material-icons">logout</span>}
       ></M3Button>
     </>
   ) : (
-    <M3Button variant={variant} onClick={loadWeb3Modal} icon={<span className="material-icons">account_circle</span>}>
+    <M3Button
+      variant={variant}
+      onClick={loadWeb3Modal}
+      icon={
+        <span className="material-icons" aria-label="Connect wallet">
+          account_circle
+        </span>
+      }
+    >
       Connect wallet
     </M3Button>
   );

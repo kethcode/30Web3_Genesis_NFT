@@ -11,11 +11,7 @@ const M3ButtonRoot = styled.button`
   gap: 8px;
   font-weight: 400;
   padding: ${props =>
-    props.icon && props.children.length > 1
-      ? "10px 24px 10px 16px"
-      : props.icon && props.children.length === 1
-      ? "10px"
-      : "10px 24px"};
+    props.icon && !props.onlyIcon ? "10px 24px 10px 16px" : props.icon && props.onlyIcon ? "10px" : "10px 24px"};
   border: none;
   border-radius: 100px;
   font-family: ${props => props.theme.get("md.sys.typescale.label-large.font")};
@@ -179,11 +175,13 @@ const M3Button = ({ variant, ...props }) => {
 M3Button.propTypes = {
   variant: PropTypes.oneOf(["filled", "outline", "elevated", "text", "tonal"]),
   disabled: PropTypes.bool,
+  onlyIcon: PropTypes.bool,
 };
 
 M3Button.defaultProps = {
   variant: "filled",
   disabled: false,
+  onlyIcon: false,
 };
 
 export default M3Button;
