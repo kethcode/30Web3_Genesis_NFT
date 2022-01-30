@@ -23,20 +23,25 @@ contract NFT30Web3 is LilOwnable, Renderer, ERC721 {
     uint256 public totalSupply;
     mapping(uint256 => address) public minterOf;
     mapping(address => bool) public claimed;
+    string public cohort;
+    mapping(uint256 => string) idToCohort;
 
-    constructor() payable ERC721("30Web3 Genesis", "30Web3_1") {}
+    constructor() payable ERC721("30Web3 Genesis", "30Web3_1") {
+        cohort = "Genesis";
+    }
 
     function mint() external payable {
         require(claimed[msg.sender] == false, "Already Claimed");
         _mint(msg.sender, totalSupply);
         claimed[msg.sender] = true;
         minterOf[totalSupply] = ownerOf[totalSupply];
+        idToCohort[totalSupply] = cohort;
         totalSupply++;
     }
 
     function tokenURI(uint256 id) public view override returns (string memory) {
         if (ownerOf[id] == address(0)) revert DoesNotExist();
-        string memory svgString = _render(id);
+        string memory svgString = _render(id, idToCohort[id]);
         return buildSvg("30Web3 Genesis", "30Web3_1", svgString);
     }
 
@@ -130,6 +135,12 @@ contract NFT30Web3 is LilOwnable, Renderer, ERC721 {
             interfaceId == 0x80ac58cd || // ERC165 Interface ID for ERC721
             interfaceId == 0x5b5e139f || // ERC165 Interface ID for ERC165
             interfaceId == 0x01ffc9a7; // ERC165 Interface ID for ERC721Metadata
+    }
+
+    function setCohort(string memory _cohort) public {
+        if (msg.sender != _owner) revert NotOwner();
+
+        cohort = _cohort;
     }
 }
 
