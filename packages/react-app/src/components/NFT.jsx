@@ -1,4 +1,4 @@
-import { Spin } from "antd";
+import { Skeleton } from "antd";
 import { motion } from "framer-motion";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import styled from "styled-components";
@@ -11,8 +11,8 @@ const Styled = styled(motion.div)`
   max-width: 18rem;
   max-height: 18rem;
   aspect-ratio: 1 / 1;
-  background: ${props => props.theme.get("md.sys.color.surface-variant", props.colorMode)};
-  border-radius: 35px;
+  background: #efefef;
+  border-radius: 28px;
   box-shadow: ${props => props.theme.get("md.sys.elevation.level3", props.colorMode)};
   display: flex;
   justify-content: center;
@@ -38,7 +38,22 @@ const MysteryNFT = ({ colorMode }) => (
 
 const LoadingNFT = () => (
   <Base>
-    <Spin />
+    <div
+      style={{
+        width: "80%",
+        height: "85%",
+        transform: "translateY(-6px)",
+        padding: "1rem",
+        display: "flex",
+        flexDirection: "column",
+        gap: ".5rem",
+        justifyContent: "space-around",
+        alignItems: "center",
+      }}
+    >
+      <Skeleton active title paragraph={false} />
+      <Skeleton.Image active size="large" height="2rem" width="2rem" />
+    </div>
   </Base>
 );
 
@@ -101,14 +116,12 @@ const NFT = ({ mystery, address, readContracts, localProvider, disableHoverEffec
   return mystery ? (
     <MysteryNFT colorMode={colorMode} />
   ) : (
-    <>
-      <IfAddress
-        address={address}
-        readContracts={readContracts}
-        localProvider={localProvider}
-        disableHoverEffect={disableHoverEffect}
-      />
-    </>
+    <IfAddress
+      address={address}
+      readContracts={readContracts}
+      localProvider={localProvider}
+      disableHoverEffect={disableHoverEffect}
+    />
   );
 };
 
