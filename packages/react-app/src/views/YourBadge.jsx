@@ -7,7 +7,7 @@ import NFT from "../components/NFT";
 import useHasNft from "../hooks/useHasNft";
 import useHasNftClaimable from "../hooks/useHasNftClaimable";
 import M3Typography from "../M3Typography";
-import { ReactComponent as OlaSittingOnTheFloor } from "../illustrations/OlaSittingOnTheFloor.svg";
+import { ReactComponent as OlaSittingOnTheFloorFemale } from "../illustrations/OlaSittingOnTheFloorFemale.svg";
 
 import { whitelist } from "../assets/whitelist.js";
 
@@ -19,7 +19,7 @@ const Base = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex-grow: 1;
+  //   flex-grow: 1;
   gap: 3rem;
 `;
 
@@ -42,16 +42,22 @@ const NoNftThisAddress = () => (
         used to register.
       </M3Typography>
     </div>
-    <OlaSittingOnTheFloor style={{ height: "18rem" }} />
+    <OlaSittingOnTheFloorFemale style={{ height: "18rem" }} />
   </>
 );
 
 const NftClaimable = ({ gasPrice, onClaim }) => (
   <>
-    <Title>
-      Nice! Your participation to 30-Web3 has awarded you a new NFT. Claim now to discover it and receive it in your
-      wallet 👀
-    </Title>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: ".5rem" }}>
+      <Title>Heads Up!</Title>
+      <M3Typography
+        fontTokenId="md.sys.typescale.body-large"
+        colorTokenId="md.sys.color.on-surface-variant"
+        style={{ textAlign: "center", maxWidth: "42rem" }}
+      >
+        Your participation to 30-Web3 has awarded you a new NFT. Claim now to discover it and receive it in your wallet.
+      </M3Typography>
+    </div>
     <NFT mystery />
     <div
       style={{
@@ -72,7 +78,17 @@ const NftClaimable = ({ gasPrice, onClaim }) => (
 
 const NftClaimed = ({ address, readContracts, localProvider }) => (
   <>
-    <Title>This NFT is your reward for completing the 30-Web3 challenge. Congratulations 🎉</Title>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: ".5rem" }}>
+      <Title> Congratulations 🎉</Title>
+      <M3Typography
+        fontTokenId="md.sys.typescale.body-large"
+        colorTokenId="md.sys.color.on-surface-variant"
+        style={{ textAlign: "center", maxWidth: "42rem" }}
+      >
+        This NFT is your reward for completing the 30W3 challenge. Flex it to your friends, you're now a true Web3
+        Buidloooooor!
+      </M3Typography>
+    </div>
     <NFT address={address} readContracts={readContracts} localProvider={localProvider} />
   </>
 );
@@ -108,7 +124,7 @@ const YourBadgeBase = ({ address, gasPrice, tx, readContracts, writeContracts, l
   };
 
   return (
-    <Base>
+    <>
       {typeof hasNft === "undefined" ? (
         <Spin />
       ) : hasNft ? (
@@ -118,7 +134,7 @@ const YourBadgeBase = ({ address, gasPrice, tx, readContracts, writeContracts, l
       ) : (
         <NoNftThisAddress />
       )}
-    </Base>
+    </>
   );
 };
 

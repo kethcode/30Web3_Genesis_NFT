@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Address } from "../components";
 import NFT from "../components/NFT";
 import M3Typography from "../M3Typography";
+import { ReactComponent as OlaSittingOnTheFloorMale } from "../illustrations/OlaSittingOnTheFloorMale.svg";
 
 const Container = styled(motion.ul)`
   width: 100%;
@@ -12,6 +13,7 @@ const Container = styled(motion.ul)`
   max-width: 68rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  justify-content: flex-start;
   align-items: flex-start;
   justify-items: center;
   gap: 2rem;
@@ -71,6 +73,24 @@ const StyledAddress = styled(Address)`
   margin-bottom: 0.5rem;
 `;
 
+const NoOwnerYet = () => (
+  <>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: ".5rem" }}>
+      <M3Typography fontTokenId="md.sys.typescale.title-large" colorTokenId="md.sys.color.on-background">
+        No one claimed their reward yet!
+      </M3Typography>
+      <M3Typography
+        fontTokenId="md.sys.typescale.body-large"
+        colorTokenId="md.sys.color.on-surface-variant"
+        style={{ textAlign: "center", maxWidth: "42rem" }}
+      >
+        Head over <b>Your badge</b> now to be the first to claim your 30W3 NFT reward.
+      </M3Typography>
+    </div>
+    <OlaSittingOnTheFloorMale style={{ height: "18rem" }} />
+  </>
+);
+
 const HallOfFame = ({ transferEvents, readContracts, localProvider, mainnetProvider }) => {
   const { currentTheme } = useThemeSwitcher();
   const colorMode = currentTheme ?? "light";
@@ -107,9 +127,7 @@ const HallOfFame = ({ transferEvents, readContracts, localProvider, mainnetProvi
       ))}
     </Container>
   ) : transferEvents && transferEvents.length === 0 ? (
-    <M3Typography fontTokenId="md.sys.typescale.title-large" colorTokenId="md.sys.color.on-background">
-      No owner yet! You'll be the first one to mint 😱
-    </M3Typography>
+    <NoOwnerYet />
   ) : (
     <Spin />
   );

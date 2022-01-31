@@ -8,6 +8,8 @@ const StyledRoot = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 4rem;
+  margin-bottom: 8rem;
 `;
 
 const Content = ({ children }) => {
