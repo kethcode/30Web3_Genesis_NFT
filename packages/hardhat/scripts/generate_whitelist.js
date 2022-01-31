@@ -3,11 +3,18 @@ const keccak256 = require('keccak256');
 
 const fs = require("fs");
 
-//import { whitelist } from "../assets/whitelist.js";
+// import { whitelist } from "../../react-app/src/assets/whitelist.js";
+// const whitelist = require("../../react-app/src/assets/whitelist.js")
 
 const main = async () => {
 
-    let whitelist = fs.readFileSync("./assets/whitelist.js").toString().split("\n");
+    let buf = fs.readFileSync("../react-app/src/assets/whitelist.js").toString().split("[")[1].split("]")[0].toString();
+    let whitelist = buf.replace(/"/g, '').replace(/,/g, '').trim().split("\n");
+
+    for(let i = 0; i < whitelist.length; i++) {
+        whitelist[i] = whitelist[i].trim();
+    }
+    
     console.log(whitelist);
 
     const leafNodes = whitelist.map(addr => keccak256(addr));

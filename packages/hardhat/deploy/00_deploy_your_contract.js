@@ -9,8 +9,13 @@ const fs = require("fs");
 
 module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
 
-  let whitelist = fs.readFileSync("./assets/whitelist.txt").toString().split("\n");
+  let buf = fs.readFileSync("../react-app/src/assets/whitelist.js").toString().split("[")[1].split("]")[0].toString();
+  let whitelist = buf.replace(/"/g, '').replace(/,/g, '').trim().split("\n");
 
+  for(let i = 0; i < whitelist.length; i++) {
+      whitelist[i] = whitelist[i].trim();
+  }
+  
   const leafNodes = whitelist.map(addr => keccak256(addr));
   const merkleTree =  new MerkleTree(leafNodes, keccak256, {sortPairs: true });
   const root = merkleTree.getRoot();
