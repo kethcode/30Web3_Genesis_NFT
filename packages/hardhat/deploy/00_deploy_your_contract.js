@@ -1,32 +1,37 @@
 // deploy/00_deploy_your_contract.js
 
 const { ethers } = require("hardhat");
-
 const localChainId = "31337";
 
-// const sleep = (ms) =>
-//   new Promise((r) =>
-//     setTimeout(() => {
-//       console.log(`waited for ${(ms / 1000).toFixed(3)} seconds`);
-//       r();
-//     }, ms)
-//   );
+const { MerkleTree } = require('merkletreejs');
+const keccak256 = require('keccak256');
+const fs = require("fs");
 
 module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
+
+  let whitelist = fs.readFileSync("./assets/whitelist.txt").toString().split("\n");
+
+  const leafNodes = whitelist.map(addr => keccak256(addr));
+  const merkleTree =  new MerkleTree(leafNodes, keccak256, {sortPairs: true });
+  const root = merkleTree.getRoot();
+
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
-
+  
   await deploy("NFT30Web3", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     // args: [ "Hello", ethers.utils.parseEther("1.5") ],
+    args: [ deployer, "Genesis", root ],
     log: true,
     waitConfirmations: 5,
   });
 
   // Getting a previously deployed contract
-  const YourContract = await ethers.getContract("NFT30Web3", deployer);
+  const nftContract = await ethers.getContract("NFT30Web3", deployer);
+
+
   /*  await YourContract.setPurpose("Hello");
   
     To take ownership of yourContract using the ownable library uncomment next line and add the 

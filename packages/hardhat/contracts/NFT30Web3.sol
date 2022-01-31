@@ -1,48 +1,71 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity >=0.6.0 <0.9.0;
 
-// Thank you m1guelpf
-// https://github.com/m1guelpf/erc721-drop
-import "./LilOwnable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
-// Thank you transmissions11
-// https://github.com/Rari-Capital/solmate
-import "@rari-capital/solmate/src/tokens/ERC721.sol";
-import "@rari-capital/solmate/src/utils/SafeTransferLib.sol";
-
-// Thank you OpenZeppelin
-//import "@openzeppelin/contracts/utils/Strings.sol"; // kinda dont want to use Strings.  will replace later.
 
 // Thank you tangert
 // https://gist.github.com/tangert/1eceaf04f2877d84fb0e10681b39d7e3#file-renderer-sol
 import "./Renderer.sol";
 
 error DoesNotExist();
+error AlreadyClaimed();
+error InvalidRoot();
+error NotOnWhitelist();
 
-contract NFT30Web3 is LilOwnable, Renderer, ERC721 {
-    uint256 public totalSupply;
+contract NFT30Web3 is ERC721Enumerable, AccessControl, Renderer {
+
+    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+
+    uint256 private currentToken;
     mapping(uint256 => address) public minterOf;
     mapping(address => bool) public claimed;
     string public cohort;
     mapping(uint256 => string) idToCohort;
 
-    constructor() payable ERC721("30Web3 Genesis", "30Web3_1") {
-        cohort = "Genesis";
+    bytes32 private whitelistRoot;
+
+    constructor(address admin, string memory _cohort, bytes32 _whitelistRoot) payable ERC721("30Web3 POAP", "30Web3") {
+        
+        _setupRole(ADMIN_ROLE, admin);
+        setCohort(_cohort);
+        whitelistRoot = _whitelistRoot;
+        // cohort = "Genesis";
     }
 
-    function mint() external payable {
-        require(claimed[msg.sender] == false, "Already Claimed");
-        _mint(msg.sender, totalSupply);
+    function setWhitelistRoot(bytes32 _whitelistRoot) external onlyRole(ADMIN_ROLE) {
+        whitelistRoot = _whitelistRoot;
+    }
+
+    function getWhitelistRoot() external view onlyRole(ADMIN_ROLE) returns (bytes32) {
+        return whitelistRoot;
+    }
+
+    function verify(bytes32[] memory _proof, bytes32 _root, bytes32 _leaf) external view returns (bool) {
+        if(whitelistRoot != _root) return false;
+        return MerkleProof.verify(_proof, _root, _leaf);
+    }
+
+    function mint(bytes32[] memory _proof, bytes32 _root, bytes32 _leaf) external payable {
+        //require(claimed[msg.sender] == false, "Already Claimed");
+        if(claimed[msg.sender] == true) revert AlreadyClaimed(); // this is a little cheaper on gas
+        if(whitelistRoot != _root) revert InvalidRoot();
+        if(MerkleProof.verify(_proof, _root, _leaf) == false) revert NotOnWhitelist();
+
+        _mint(msg.sender, currentToken);
         claimed[msg.sender] = true;
-        minterOf[totalSupply] = ownerOf[totalSupply];
-        idToCohort[totalSupply] = cohort;
-        totalSupply++;
+
+        minterOf[currentToken] = ownerOf(currentToken);
+        idToCohort[currentToken] = cohort;
+        currentToken++;
     }
 
     function tokenURI(uint256 id) public view override returns (string memory) {
-        if (ownerOf[id] == address(0)) revert DoesNotExist();
+        if (ownerOf(id) == address(0)) revert DoesNotExist();
         string memory svgString = _render(id, idToCohort[id]);
-        return buildSvg("30Web3 Genesis", "30Web3_1", svgString);
+        return buildSvg("30-Web3", "Congratulation on your successful completion of 30-Web3!!!", svgString);
     }
 
     function ownsNFT() public view returns (bool) {
@@ -118,28 +141,21 @@ contract NFT30Web3 is LilOwnable, Renderer, ERC721 {
         else return bytes1(uint8(b) + 0x57);
     }
 
-    function withdraw() external {
-        if (msg.sender != _owner) revert NotOwner();
-
-        SafeTransferLib.safeTransferETH(msg.sender, address(this).balance);
+    function withdraw() external onlyRole(ADMIN_ROLE) {
+        uint balanceWithdraw = address(this).balance;
+        payable(msg.sender).transfer(balanceWithdraw);
     }
 
     function supportsInterface(bytes4 interfaceId)
         public
-        pure
-        override(LilOwnable, ERC721)
+        view
+        override(ERC721Enumerable, AccessControl)
         returns (bool)
     {
-        return
-            interfaceId == 0x7f5828d0 || // ERC165 Interface ID for ERC173
-            interfaceId == 0x80ac58cd || // ERC165 Interface ID for ERC721
-            interfaceId == 0x5b5e139f || // ERC165 Interface ID for ERC165
-            interfaceId == 0x01ffc9a7; // ERC165 Interface ID for ERC721Metadata
+        return super.supportsInterface(interfaceId);
     }
 
-    function setCohort(string memory _cohort) public {
-        if (msg.sender != _owner) revert NotOwner();
-
+    function setCohort(string memory _cohort) public onlyRole(ADMIN_ROLE) {
         cohort = _cohort;
     }
 }

@@ -8,6 +8,11 @@ import useHasNft from "../hooks/useHasNft";
 import useHasNftClaimable from "../hooks/useHasNftClaimable";
 import M3Typography from "../M3Typography";
 
+import { whitelist } from "../assets/whitelist.js";
+
+const { MerkleTree } = require("merkletreejs");
+const keccak256 = require("keccak256");
+
 const Base = styled.div`
   width: 100%;
   display: flex;
@@ -60,8 +65,15 @@ const NftClaimed = ({ address, readContracts, localProvider }) => (
 const YourBadgeBase = ({ address, gasPrice, tx, readContracts, writeContracts, localProvider }) => {
   const hasNft = useHasNft(address, readContracts);
   const hasNftClaimable = useHasNftClaimable(address, readContracts);
+
+  const leafNodes = whitelist.map(address => keccak256(address));
+  const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
+  const root = merkleTree.getRoot();
+  const leaf = keccak256(address);
+  const proof = merkleTree.getHexProof(leaf);
+
   const handleClaim = async () => {
-    const result = tx(writeContracts.NFT30Web3.mint(), update => {
+    const result = tx(writeContracts.NFT30Web3.mint(proof, root, leaf), update => {
       console.log("📡 Transaction Update:", update);
       if (update && (update.status === "confirmed" || update.status === 1)) {
         console.log(" 🍾 Transaction " + update.hash + " finished!");
