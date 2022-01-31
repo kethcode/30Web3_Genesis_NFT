@@ -1,6 +1,5 @@
 import { Spin } from "antd";
 import PropTypes from "prop-types";
-import styled from "styled-components";
 import { GasGauge } from "../components";
 import M3Button from "../components/M3Button";
 import NFT from "../components/NFT";
@@ -13,15 +12,6 @@ import { whitelist } from "../assets/whitelist.js";
 
 const { MerkleTree } = require("merkletreejs");
 const keccak256 = require("keccak256");
-
-const Base = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  //   flex-grow: 1;
-  gap: 3rem;
-`;
 
 const Title = ({ children }) => (
   <M3Typography fontTokenId="md.sys.typescale.title-large" style={{ textAlign: "center", maxWidth: "42rem" }}>
