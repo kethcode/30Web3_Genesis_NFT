@@ -32,7 +32,9 @@ const Base = ({ children, colorMode, disableHoverEffect }) => (
 
 const MysteryNFT = ({ colorMode }) => (
   <Base colorMode={colorMode}>
-    <M3Typography style={{ fontSize: "10rem" }}>?</M3Typography>
+    <M3Typography style={{ fontSize: "10rem" }} colorTokenId="md.sys.color.primary">
+      ?
+    </M3Typography>
   </Base>
 );
 

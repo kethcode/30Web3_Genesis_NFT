@@ -39,6 +39,7 @@
     "fundedwallet": "cd packages/hardhat && npx hardhat fundedwallet",
     "flatten": "cd packages/hardhat && npx hardhat flatten",
     "clean": "cd packages/hardhat && npx hardhat clean",
+    "whitelist": "yarn workspace @scaffold-eth/hardhat whitelist",
     "run-graph-node": "yarn workspace @scaffold-eth/services run-graph-node",
     "remove-graph-node": "yarn workspace @scaffold-eth/services remove-graph-node",
     "clean-graph-node": "yarn workspace @scaffold-eth/services clean-graph-node",
