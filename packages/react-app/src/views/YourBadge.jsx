@@ -7,6 +7,7 @@ import NFT from "../components/NFT";
 import useHasNft from "../hooks/useHasNft";
 import useHasNftClaimable from "../hooks/useHasNftClaimable";
 import M3Typography from "../M3Typography";
+import { ReactComponent as OlaSittingOnTheFloor } from "../illustrations/OlaSittingOnTheFloor.svg";
 
 import { whitelist } from "../assets/whitelist.js";
 
@@ -23,12 +24,26 @@ const Base = styled.div`
 `;
 
 const Title = ({ children }) => (
-  <M3Typography
-    fontTokenId="md.sys.typescale.title-large"
-    style={{ textAlign: "center", maxWidth: "42rem", height: "4rem" }}
-  >
+  <M3Typography fontTokenId="md.sys.typescale.title-large" style={{ textAlign: "center", maxWidth: "42rem" }}>
     {children}
   </M3Typography>
+);
+
+const NoNftThisAddress = () => (
+  <>
+    <div style={{ display: "flex", flexDirection: "column", gap: ".5rem" }}>
+      <Title>Sorry, your wallet isn't eligible to claim the NFT reward!</Title>
+      <M3Typography
+        fontTokenId="md.sys.typescale.body-large"
+        colorTokenId="md.sys.color.on-surface-variant"
+        style={{ textAlign: "center", maxWidth: "42rem" }}
+      >
+        Your wallet is eligible if you successfully passed the 30W3 challenge. If you did, connect with the address you
+        used to register.
+      </M3Typography>
+    </div>
+    <OlaSittingOnTheFloor style={{ height: "18rem" }} />
+  </>
 );
 
 const NftClaimable = ({ gasPrice, onClaim }) => (
@@ -101,7 +116,7 @@ const YourBadgeBase = ({ address, gasPrice, tx, readContracts, writeContracts, l
       ) : hasNftClaimable ? (
         <NftClaimable gasPrice={gasPrice} tx={tx} onClaim={handleClaim} />
       ) : (
-        <div>Sorry, no NFT for you</div>
+        <NoNftThisAddress />
       )}
     </Base>
   );
