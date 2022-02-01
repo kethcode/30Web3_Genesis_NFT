@@ -54,13 +54,13 @@ const Account = ({
   logoutOfWeb3Modal,
   blockExplorer,
   isContract,
-  variant = "outline",
+  buttonVariant = "outline",
 }) => {
   const isConnected = useIsConnected(web3Modal);
 
   return isConnected ? (
     <>
-      <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} variant={variant} />
+      <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} variant={buttonVariant} />
       <M3Button
         variant="outline"
         onlyIcon
@@ -71,7 +71,7 @@ const Account = ({
     </>
   ) : (
     <M3Button
-      variant={variant}
+      variant={buttonVariant}
       onClick={loadWeb3Modal}
       icon={
         <span className="material-icons" aria-label="Connect wallet">

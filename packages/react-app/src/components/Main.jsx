@@ -10,6 +10,7 @@ const StyledRoot = styled.div`
   align-items: center;
   padding: 3rem 3rem 0px 3rem;
   gap: 4rem;
+  overflow: hidden;
 `;
 
 const Main = ({ children }) => {

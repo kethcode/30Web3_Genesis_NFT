@@ -5,32 +5,22 @@ import M3Button from "../components/M3Button";
 import NFT from "../components/NFT";
 import useHasNft from "../hooks/useHasNft";
 import useHasNftClaimable from "../hooks/useHasNftClaimable";
-import M3Typography from "../M3Typography";
 import { ReactComponent as OlaSittingOnTheFloorFemale } from "../illustrations/OlaSittingOnTheFloorFemale.svg";
-
 import { whitelist } from "../assets/whitelist.js";
+import Title from "../components/Title";
+import Subtitle from "../components/Subtitle";
 
 const { MerkleTree } = require("merkletreejs");
 const keccak256 = require("keccak256");
-
-const Title = ({ children }) => (
-  <M3Typography fontTokenId="md.sys.typescale.title-large" style={{ textAlign: "center", maxWidth: "42rem" }}>
-    {children}
-  </M3Typography>
-);
 
 const NoNftThisAddress = () => (
   <>
     <div style={{ display: "flex", flexDirection: "column", gap: ".5rem" }}>
       <Title>Sorry, your wallet isn't eligible to claim the NFT reward!</Title>
-      <M3Typography
-        fontTokenId="md.sys.typescale.body-large"
-        colorTokenId="md.sys.color.on-surface-variant"
-        style={{ textAlign: "center", maxWidth: "42rem" }}
-      >
+      <Subtitle>
         Your wallet is eligible if you successfully passed the 30W3 challenge. If you did, connect with the address you
         used to register.
-      </M3Typography>
+      </Subtitle>
     </div>
     <OlaSittingOnTheFloorFemale style={{ height: "18rem" }} />
   </>
@@ -40,13 +30,9 @@ const NftClaimable = ({ gasPrice, onClaim }) => (
   <>
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: ".5rem" }}>
       <Title>Heads Up!</Title>
-      <M3Typography
-        fontTokenId="md.sys.typescale.body-large"
-        colorTokenId="md.sys.color.on-surface-variant"
-        style={{ textAlign: "center", maxWidth: "42rem" }}
-      >
+      <Subtitle>
         Your participation to 30-Web3 has awarded you a new NFT. Claim now to discover it and receive it in your wallet.
-      </M3Typography>
+      </Subtitle>
     </div>
     <NFT mystery />
     <div
@@ -70,14 +56,10 @@ const NftClaimed = ({ address, readContracts, localProvider }) => (
   <>
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: ".5rem" }}>
       <Title> Congratulations 🎉</Title>
-      <M3Typography
-        fontTokenId="md.sys.typescale.body-large"
-        colorTokenId="md.sys.color.on-surface-variant"
-        style={{ textAlign: "center", maxWidth: "42rem" }}
-      >
-        This NFT is your reward for completing the 30W3 challenge. Flex it to your friends, you're now a true Web3
+      <Subtitle>
+        This NFT is your reward for completing the 30W3 challenge. Flex it to your friends, you're now a Web3
         Buidloooooor!
-      </M3Typography>
+      </Subtitle>
     </div>
     <NFT address={address} readContracts={readContracts} localProvider={localProvider} />
   </>

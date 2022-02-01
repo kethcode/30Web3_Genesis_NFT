@@ -39,9 +39,7 @@ import Main from "./components/Main";
 import Demo from "./views/Demo";
 import YourBadge from "./views/YourBadge";
 import HallOfFame from "./views/HallOfFame";
-import Relay from "./views/Relay";
 import useIsConnected from "./hooks/useIsConnected";
-import Content from "./components/Content";
 import useGetTransferEvents from "./hooks/useGetTransferEvents";
 
 const { ethers } = require("ethers");
@@ -271,26 +269,26 @@ const App = props => {
   const isConnected = useIsConnected(web3Modal);
 
   const faucetAvailable = localProvider && localProvider.connection && targetNetwork.name.indexOf("local") !== -1;
+
+  const account = (
+    <Account
+      useBurner={false}
+      address={address}
+      localProvider={localProvider}
+      userSigner={userSigner}
+      mainnetProvider={mainnetProvider}
+      price={price}
+      web3Modal={web3Modal}
+      loadWeb3Modal={loadWeb3Modal}
+      logoutOfWeb3Modal={logoutOfWeb3Modal}
+      blockExplorer={blockExplorer}
+      variant="outline"
+    />
+  );
+
   return (
     <StyledRoot currentTheme={currentTheme}>
-      <Header
-        web3Modal={web3Modal}
-        account={
-          <Account
-            useBurner={false}
-            address={address}
-            localProvider={localProvider}
-            userSigner={userSigner}
-            mainnetProvider={mainnetProvider}
-            price={price}
-            web3Modal={web3Modal}
-            loadWeb3Modal={loadWeb3Modal}
-            logoutOfWeb3Modal={logoutOfWeb3Modal}
-            blockExplorer={blockExplorer}
-            variant="outline"
-          />
-        }
-      />
+      <Header web3Modal={web3Modal} account={account} />
       <Main>
         <NetworkDisplay
           NETWORKCHECK={NETWORKCHECK}
@@ -301,16 +299,15 @@ const App = props => {
           USE_NETWORK_SELECTOR={USE_NETWORK_SELECTOR}
         />
         {isConnected && <Nav address={address} readContracts={readContracts} />}
-        <Content>
-          {!isConnected && <Redirect to="/connect" />}
-          <Switch>
-            <Route exact path="/">
-              {isConnected ? <Redirect to="/badge" /> : <Redirect to="/connect" />}
-            </Route>
-            <Route exact path="/connect">
-              {!isConnected ? <Connect web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} /> : <Redirect to="/" />}
-            </Route>
-            <Route exact path="/badge">
+        <Switch>
+          <Route exact path="/">
+            {isConnected ? <Redirect to="/badge" /> : <Redirect to="/connect" />}
+          </Route>
+          <Route exact path="/connect">
+            {!isConnected ? <Connect web3Modal={web3Modal} loadWeb3Modal={loadWeb3Modal} /> : <Redirect to="/" />}
+          </Route>
+          <Route exact path="/badge">
+            {isConnected ? (
               <YourBadge
                 address={address}
                 gasPrice={gasPrice}
@@ -319,92 +316,94 @@ const App = props => {
                 writeContracts={writeContracts}
                 localProvider={localProvider}
               />
-            </Route>
-            <Route exact path="/hall">
-              <HallOfFame
-                transferEvents={transferEvents}
-                readContracts={readContracts}
-                localProvider={localProvider}
-                mainnetProvider={mainnetProvider}
-              />
-            </Route>
-            <Route exact path="/relay">
-              <Relay />
-            </Route>
-            <Route exact path="/demo">
-              <Demo />
-            </Route>
-            <Route path="/se">
-              <Menu style={{ textAlign: "center", marginTop: 40 }} selectedKeys={[location.pathname]} mode="horizontal">
-                <Menu.Item key="/se">
-                  <Link to="/se/">App Home</Link>
-                </Menu.Item>
-                <Menu.Item key="/se/debug">
-                  <Link to="/se/debug">Debug Contracts</Link>
-                </Menu.Item>
-                <Menu.Item key="/se/hints">
-                  <Link to="/se/hints">Hints</Link>
-                </Menu.Item>
-                <Menu.Item key="/se/exampleui">
-                  <Link to="/se/exampleui">ExampleUI</Link>
-                </Menu.Item>
-                <Menu.Item key="/se/mainnetdai">
-                  <Link to="/se/mainnetdai">Mainnet DAI</Link>
-                </Menu.Item>
-                <Menu.Item key="/se/subgraph">
-                  <Link to="/se/subgraph">Subgraph</Link>
-                </Menu.Item>
-              </Menu>
-              <Switch>
-                <Route exact path="/">
-                  {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
-                  <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
-                </Route>
-                <Route exact path="/se/debug">
-                  <Contract
-                    name="NFT30Web3"
-                    price={price}
-                    signer={userSigner}
-                    provider={localProvider}
-                    address={address}
-                    blockExplorer={blockExplorer}
-                    contractConfig={contractConfig}
-                  />
-                </Route>
-                <Route path="/se/hints">
-                  <Hints
-                    address={address}
-                    yourLocalBalance={yourLocalBalance}
-                    mainnetProvider={mainnetProvider}
-                    price={price}
-                  />
-                </Route>
-                <Route path="/se/exampleui">
-                  <ExampleUI
-                    address={address}
-                    userSigner={userSigner}
-                    mainnetProvider={mainnetProvider}
-                    localProvider={localProvider}
-                    yourLocalBalance={yourLocalBalance}
-                    price={price}
-                    tx={tx}
-                    writeContracts={writeContracts}
-                    readContracts={readContracts}
-                    purpose={symbol}
-                  />
-                </Route>
-                <Route path="/se/mainnetdai">
-                  <Contract
-                    name="DAI"
-                    customContract={mainnetContracts && mainnetContracts.contracts && mainnetContracts.contracts.DAI}
-                    signer={userSigner}
-                    provider={mainnetProvider}
-                    address={address}
-                    blockExplorer="https://etherscan.io/"
-                    contractConfig={contractConfig}
-                    chainId={1}
-                  />
-                  {/*
+            ) : (
+              <Redirect to="/connect" />
+            )}
+          </Route>
+          <Route exact path="/hall">
+            <HallOfFame
+              transferEvents={transferEvents}
+              readContracts={readContracts}
+              localProvider={localProvider}
+              mainnetProvider={mainnetProvider}
+              web3Modal={web3Modal}
+              account={account}
+            />
+          </Route>
+          <Route exact path="/demo">
+            <Demo />
+          </Route>
+          <Route path="/se">
+            <Menu style={{ textAlign: "center", marginTop: 40 }} selectedKeys={[location.pathname]} mode="horizontal">
+              <Menu.Item key="/se">
+                <Link to="/se/">App Home</Link>
+              </Menu.Item>
+              <Menu.Item key="/se/debug">
+                <Link to="/se/debug">Debug Contracts</Link>
+              </Menu.Item>
+              <Menu.Item key="/se/hints">
+                <Link to="/se/hints">Hints</Link>
+              </Menu.Item>
+              <Menu.Item key="/se/exampleui">
+                <Link to="/se/exampleui">ExampleUI</Link>
+              </Menu.Item>
+              <Menu.Item key="/se/mainnetdai">
+                <Link to="/se/mainnetdai">Mainnet DAI</Link>
+              </Menu.Item>
+              <Menu.Item key="/se/subgraph">
+                <Link to="/se/subgraph">Subgraph</Link>
+              </Menu.Item>
+            </Menu>
+            <Switch>
+              <Route exact path="/">
+                {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
+                <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
+              </Route>
+              <Route exact path="/se/debug">
+                <Contract
+                  name="NFT30Web3"
+                  price={price}
+                  signer={userSigner}
+                  provider={localProvider}
+                  address={address}
+                  blockExplorer={blockExplorer}
+                  contractConfig={contractConfig}
+                />
+              </Route>
+              <Route path="/se/hints">
+                <Hints
+                  address={address}
+                  yourLocalBalance={yourLocalBalance}
+                  mainnetProvider={mainnetProvider}
+                  price={price}
+                />
+              </Route>
+              <Route path="/se/exampleui">
+                <ExampleUI
+                  address={address}
+                  userSigner={userSigner}
+                  mainnetProvider={mainnetProvider}
+                  localProvider={localProvider}
+                  yourLocalBalance={yourLocalBalance}
+                  price={price}
+                  tx={tx}
+                  writeContracts={writeContracts}
+                  readContracts={readContracts}
+                  purpose={symbol}
+                />
+              </Route>
+              <Route path="/se/mainnetdai">
+                <Contract
+                  name="DAI"
+                  customContract={mainnetContracts && mainnetContracts.contracts && mainnetContracts.contracts.DAI}
+                  signer={userSigner}
+                  provider={mainnetProvider}
+                  address={address}
+                  blockExplorer="https://etherscan.io/"
+                  contractConfig={contractConfig}
+                  chainId={1}
+                />
+                {/*
             <Contract
               name="UNI"
               customContract={mainnetContracts && mainnetContracts.contracts && mainnetContracts.contracts.UNI}
@@ -414,91 +413,89 @@ const App = props => {
               blockExplorer="https://etherscan.io/"
             />
             */}
-                </Route>
-                <Route path="/se/subgraph">
-                  <Subgraph
-                    subgraphUri={props.subgraphUri}
-                    tx={tx}
-                    writeContracts={writeContracts}
-                    mainnetProvider={mainnetProvider}
-                  />
-                </Route>
-              </Switch>
-              <ThemeSwitcher />
+              </Route>
+              <Route path="/se/subgraph">
+                <Subgraph
+                  subgraphUri={props.subgraphUri}
+                  tx={tx}
+                  writeContracts={writeContracts}
+                  mainnetProvider={mainnetProvider}
+                />
+              </Route>
+            </Switch>
+            <ThemeSwitcher />
 
-              {/* 👨‍💼 Your account is in the top right with a wallet at connect options */}
-              <div style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>
-                <div style={{ display: "flex", flex: 1, alignItems: "center" }}>
-                  {USE_NETWORK_SELECTOR && (
-                    <div style={{ marginRight: 20 }}>
-                      <NetworkSwitch
-                        networkOptions={networkOptions}
-                        selectedNetwork={selectedNetwork}
-                        setSelectedNetwork={setSelectedNetwork}
-                      />
-                    </div>
-                  )}
-                  <Account
-                    useBurner={USE_BURNER_WALLET}
-                    address={address}
-                    localProvider={localProvider}
-                    userSigner={userSigner}
-                    mainnetProvider={mainnetProvider}
-                    price={price}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    blockExplorer={blockExplorer}
-                  />
-                </div>
-                {yourLocalBalance.lte(ethers.BigNumber.from("0")) && (
-                  <FaucetHint localProvider={localProvider} targetNetwork={targetNetwork} address={address} />
+            {/* 👨‍💼 Your account is in the top right with a wallet at connect options */}
+            <div style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>
+              <div style={{ display: "flex", flex: 1, alignItems: "center" }}>
+                {USE_NETWORK_SELECTOR && (
+                  <div style={{ marginRight: 20 }}>
+                    <NetworkSwitch
+                      networkOptions={networkOptions}
+                      selectedNetwork={selectedNetwork}
+                      setSelectedNetwork={setSelectedNetwork}
+                    />
+                  </div>
                 )}
+                <Account
+                  useBurner={USE_BURNER_WALLET}
+                  address={address}
+                  localProvider={localProvider}
+                  userSigner={userSigner}
+                  mainnetProvider={mainnetProvider}
+                  price={price}
+                  web3Modal={web3Modal}
+                  loadWeb3Modal={loadWeb3Modal}
+                  logoutOfWeb3Modal={logoutOfWeb3Modal}
+                  blockExplorer={blockExplorer}
+                />
               </div>
+              {yourLocalBalance.lte(ethers.BigNumber.from("0")) && (
+                <FaucetHint localProvider={localProvider} targetNetwork={targetNetwork} address={address} />
+              )}
+            </div>
 
-              {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
-              <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
-                <Row align="middle" gutter={[4, 4]}>
-                  <Col span={8}>
-                    <Ramp price={price} address={address} networks={NETWORKS} />
-                  </Col>
+            {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
+            <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
+              <Row align="middle" gutter={[4, 4]}>
+                <Col span={8}>
+                  <Ramp price={price} address={address} networks={NETWORKS} />
+                </Col>
 
-                  <Col span={8} style={{ textAlign: "center", opacity: 0.8 }}>
-                    <GasGauge gasPrice={gasPrice} />
-                  </Col>
-                  <Col span={8} style={{ textAlign: "center", opacity: 1 }}>
-                    <Button
-                      onClick={() => {
-                        window.open("https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA");
-                      }}
-                      size="large"
-                      shape="round"
-                    >
-                      <span style={{ marginRight: 8 }} role="img" aria-label="support">
-                        💬
-                      </span>
-                      Support
-                    </Button>
-                  </Col>
-                </Row>
+                <Col span={8} style={{ textAlign: "center", opacity: 0.8 }}>
+                  <GasGauge gasPrice={gasPrice} />
+                </Col>
+                <Col span={8} style={{ textAlign: "center", opacity: 1 }}>
+                  <Button
+                    onClick={() => {
+                      window.open("https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA");
+                    }}
+                    size="large"
+                    shape="round"
+                  >
+                    <span style={{ marginRight: 8 }} role="img" aria-label="support">
+                      💬
+                    </span>
+                    Support
+                  </Button>
+                </Col>
+              </Row>
 
-                <Row align="middle" gutter={[4, 4]}>
-                  <Col span={24}>
-                    {
-                      /*  if the local provider has a signer, let's show the faucet:  */
-                      faucetAvailable ? (
-                        <Faucet localProvider={localProvider} price={price} ensProvider={mainnetProvider} />
-                      ) : (
-                        ""
-                      )
-                    }
-                  </Col>
-                </Row>
-              </div>
-            </Route>
-          </Switch>
-        </Content>
-        {/* {isConnected && <Nav address={address} readContracts={readContracts} />} */}
+              <Row align="middle" gutter={[4, 4]}>
+                <Col span={24}>
+                  {
+                    /*  if the local provider has a signer, let's show the faucet:  */
+                    faucetAvailable ? (
+                      <Faucet localProvider={localProvider} price={price} ensProvider={mainnetProvider} />
+                    ) : (
+                      ""
+                    )
+                  }
+                </Col>
+              </Row>
+            </div>
+          </Route>
+        </Switch>
       </Main>
     </StyledRoot>
   );

@@ -175,12 +175,14 @@ const M3Button = ({ variant, ...props }) => {
 M3Button.propTypes = {
   variant: PropTypes.oneOf(["filled", "outline", "elevated", "text", "tonal"]),
   disabled: PropTypes.bool,
+  icon: PropTypes.element,
   onlyIcon: PropTypes.bool,
 };
 
 M3Button.defaultProps = {
   variant: "filled",
   disabled: false,
+  icon: undefined,
   onlyIcon: false,
 };
 

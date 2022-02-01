@@ -6,13 +6,18 @@ import { Address } from "../components";
 import NFT from "../components/NFT";
 import M3Typography from "../M3Typography";
 import { ReactComponent as OlaSittingOnTheFloorMale } from "../illustrations/OlaSittingOnTheFloorMale.svg";
+import useIsConnected from "../hooks/useIsConnected";
+import M3Button from "../components/M3Button";
+import { Link } from "react-router-dom";
+import Title from "../components/Title";
+import Subtitle from "../components/Subtitle";
 
 const Container = styled(motion.ul)`
   width: 100%;
-  height: calc(100vh - 14.5rem);
   max-width: 68rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  grid-template-rows: repeat(auto-fit, 1fr);
   justify-content: flex-start;
   align-items: flex-start;
   justify-items: center;
@@ -20,7 +25,7 @@ const Container = styled(motion.ul)`
   margin: 0;
   list-style: none;
   padding: 0;
-  overflow: scroll;
+  overflow-x: auto;
 `;
 
 const containerMotion = {
@@ -73,41 +78,58 @@ const StyledAddress = styled(Address)`
   margin-bottom: 0.5rem;
 `;
 
-const NoOwnerYet = () => (
-  <>
+const Texts = ({ transferEvents, web3Modal }) => {
+  const isConnected = useIsConnected(web3Modal);
+  return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: ".5rem" }}>
-      <M3Typography fontTokenId="md.sys.typescale.title-large" colorTokenId="md.sys.color.on-background">
-        No one claimed their reward yet!
-      </M3Typography>
-      <M3Typography
-        fontTokenId="md.sys.typescale.body-large"
-        colorTokenId="md.sys.color.on-surface-variant"
-        style={{ textAlign: "center", maxWidth: "42rem" }}
-      >
-        Head over <b>Your badge</b> now to be the first to claim your 30W3 NFT reward.
-      </M3Typography>
+      {transferEvents && transferEvents.length > 0 ? (
+        <>
+          <Title>Great Web3 builders</Title>
+          <Subtitle>Who all successfully passed the 30W3 challenge. Kudos to all 👏</Subtitle>
+        </>
+      ) : (
+        <>
+          <Title>No one claimed their reward yet</Title>
+          <Subtitle>
+            {isConnected ? (
+              <>
+                Head over <b>Your badge</b> now to be the first to claim your 30W3 NFT reward!
+              </>
+            ) : (
+              <>Connect your wallet to be the first to claim your 30W3 NFT reward!</>
+            )}
+          </Subtitle>
+        </>
+      )}
     </div>
-    <OlaSittingOnTheFloorMale style={{ height: "18rem" }} />
-  </>
-);
+  );
+};
 
-const HallOfFame = ({ transferEvents, readContracts, localProvider, mainnetProvider }) => {
+const Actions = ({ web3Modal, account }) => {
+  const isConnected = useIsConnected(web3Modal);
+  return (
+    !isConnected && (
+      <div style={{ display: "flex", gap: "2rem" }}>
+        <Link to="/">
+          <M3Button variant="text" icon={<span className="material-icons">arrow_back</span>}>
+            Back
+          </M3Button>
+        </Link>
+        {account}
+      </div>
+    )
+  );
+};
+
+const Content = ({ transferEvents, readContracts, localProvider, mainnetProvider }) => {
   const { currentTheme } = useThemeSwitcher();
   const colorMode = currentTheme ?? "light";
   return transferEvents && transferEvents.length > 0 ? (
     <Container variants={containerMotion} initial="hidden" animate="visible">
-      {transferEvents.map(e => (
-        <Item key={e.args[1]} address={e.args[1]} colorMode={colorMode} variants={itemMotion}>
+      {transferEvents.map((e, index) => (
+        <Item key={index} address={e.args[1]} colorMode={colorMode} variants={itemMotion}>
           <NFT address={e.args[1]} readContracts={readContracts} localProvider={localProvider} disableHoverEffect />
-          <StyledAddress
-            address={e.args[1]}
-            ensProvider={mainnetProvider}
-            variant="text"
-            // style={{
-            //   marginTop: "2rem",
-            //   marginBottom: "0.5rem",
-            // }}
-          />
+          <StyledAddress address={e.args[1]} ensProvider={mainnetProvider} variant="text" />
           <div
             style={{
               display: "flex",
@@ -127,9 +149,26 @@ const HallOfFame = ({ transferEvents, readContracts, localProvider, mainnetProvi
       ))}
     </Container>
   ) : transferEvents && transferEvents.length === 0 ? (
-    <NoOwnerYet />
+    <OlaSittingOnTheFloorMale style={{ height: "18rem" }} />
   ) : (
     <Spin />
+  );
+};
+
+const HallOfFame = ({ transferEvents, readContracts, localProvider, mainnetProvider, web3Modal, account }) => {
+  return (
+    <>
+      <Texts transferEvents={transferEvents} />
+      <Actions web3Modal={web3Modal} account={account} />
+      <Content
+        transferEvents={transferEvents}
+        readContracts={readContracts}
+        localProvider={localProvider}
+        mainnetProvider={mainnetProvider}
+        web3Modal={web3Modal}
+        account={account}
+      />
+    </>
   );
 };
 
