@@ -1,54 +1,21 @@
 import { Spin } from "antd";
 import PropTypes from "prop-types";
-import { GasGauge } from "../components";
-import M3Button from "../components/M3Button";
 import NFT from "../components/NFT";
 import useHasNft from "../hooks/useHasNft";
-import useHasNftClaimable from "../hooks/useHasNftClaimable";
 import { ReactComponent as OlaSittingOnTheFloorFemale } from "../illustrations/OlaSittingOnTheFloorFemale.svg";
-import { whitelist } from "../assets/whitelist.js";
 import Title from "../components/Title";
 import Subtitle from "../components/Subtitle";
-
-const { MerkleTree } = require("merkletreejs");
-const keccak256 = require("keccak256");
 
 const NoNftThisAddress = () => (
   <>
     <div style={{ display: "flex", flexDirection: "column", gap: ".5rem" }}>
-      <Title>Sorry, your wallet isn't eligible to claim the NFT reward!</Title>
+      <Title>Your NFT reward is on its way</Title>
       <Subtitle>
-        Your wallet is eligible if you successfully passed the 30W3 challenge. If you did, connect with the address you
-        used to register.
+        Make sure you're connected with the wallet you used to register at 30W3. If you successfully passed the 30W3
+        challenge, you should receive in a while. Come check again soon!
       </Subtitle>
     </div>
     <OlaSittingOnTheFloorFemale style={{ height: "18rem" }} />
-  </>
-);
-
-const NftClaimable = ({ gasPrice, onClaim }) => (
-  <>
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: ".5rem" }}>
-      <Title>Heads Up!</Title>
-      <Subtitle>
-        Your participation to 30-Web3 has awarded you a new NFT. Claim now to discover it and receive it in your wallet.
-      </Subtitle>
-    </div>
-    <NFT mystery />
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: ".5rem",
-      }}
-    >
-      <M3Button variant="filled" onClick={onClaim}>
-        Claim now
-      </M3Button>
-      <GasGauge gasPrice={gasPrice} />
-    </div>
   </>
 );
 
@@ -65,44 +32,14 @@ const NftClaimed = ({ address, readContracts, localProvider }) => (
   </>
 );
 
-const YourBadgeBase = ({ address, gasPrice, tx, readContracts, writeContracts, localProvider }) => {
+const YourBadgeBase = ({ address, readContracts, localProvider }) => {
   const hasNft = useHasNft(address, readContracts);
-  const hasNftClaimable = useHasNftClaimable(address, readContracts);
-
-  const leafNodes = whitelist.map(address => keccak256(address));
-  const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
-  const root = merkleTree.getRoot();
-  const leaf = keccak256(address);
-  const proof = merkleTree.getHexProof(leaf);
-
-  const handleClaim = async () => {
-    const result = tx(writeContracts.NFT30Web3.mint(proof, root, leaf), update => {
-      console.log("📡 Transaction Update:", update);
-      if (update && (update.status === "confirmed" || update.status === 1)) {
-        console.log(" 🍾 Transaction " + update.hash + " finished!");
-        console.log(
-          " ⛽️ " +
-            update.gasUsed +
-            "/" +
-            (update.gasLimit || update.gas) +
-            " @ " +
-            parseFloat(update.gasPrice) / 1000000000 +
-            " gwei",
-        );
-      }
-    });
-    console.log("awaiting metamask/web3 confirm result...", result);
-    console.log(await result);
-  };
-
   return (
     <>
       {typeof hasNft === "undefined" ? (
         <Spin />
       ) : hasNft ? (
         <NftClaimed address={address} readContracts={readContracts} localProvider={localProvider} />
-      ) : hasNftClaimable ? (
-        <NftClaimable gasPrice={gasPrice} tx={tx} onClaim={handleClaim} />
       ) : (
         <NoNftThisAddress />
       )}
@@ -114,18 +51,11 @@ YourBadgeBase.propTypes = {
   address: PropTypes.string.isRequired,
 };
 
-const YourBadge = ({ address, gasPrice, tx, readContracts, writeContracts, localProvider }) => {
+const YourBadge = ({ address, readContracts, localProvider }) => {
   return !address ? (
     <Spin />
   ) : (
-    <YourBadgeBase
-      address={address}
-      gasPrice={gasPrice}
-      tx={tx}
-      readContracts={readContracts}
-      writeContracts={writeContracts}
-      localProvider={localProvider}
-    />
+    <YourBadgeBase address={address} readContracts={readContracts} localProvider={localProvider} />
   );
 };
 

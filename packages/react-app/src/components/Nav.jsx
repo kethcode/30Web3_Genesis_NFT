@@ -1,9 +1,8 @@
 import { motion } from "framer-motion";
-import PropTypes from "prop-types";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import useHasNftClaimable from "../hooks/useHasNftClaimable";
+import useHasNft from "../hooks/useHasNft";
 import M3Typography from "../M3Typography";
 import MINTER_ADDRESS from "../MINTER_ADDRESS";
 
@@ -154,7 +153,7 @@ const Container = styled.span`
 const Nav = ({ address, readContracts }) => {
   const { currentTheme } = useThemeSwitcher();
   const colorMode = currentTheme ?? "light";
-  const hasNftClaimable = useHasNftClaimable(address, readContracts);
+  const hasNft = useHasNft(address, readContracts);
   const items = ITEMS.filter(item => !item.limitToAddres || item.limitToAddres === address);
 
   return (
@@ -168,19 +167,11 @@ const Nav = ({ address, readContracts }) => {
           colorMode={colorMode}
           isFirst={index === 0}
           isLast={index === items.length - 1}
-          hasNotif={hasNftClaimable && index === 0}
+          hasNotif={hasNft && index === 0}
         />
       ))}
     </Container>
   );
-};
-
-Nav.propTypes = {
-  badgeClaimable: PropTypes.bool,
-};
-
-Nav.defaultProps = {
-  badgeClaimable: false,
 };
 
 export default Nav;

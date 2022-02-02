@@ -248,9 +248,6 @@ const App = props => {
     provider.on("accountsChanged", () => {
       console.log(`account changed!`);
       setInjectedProvider(new ethers.providers.Web3Provider(provider));
-      // Lazy ways
-      //   window.location.reload();
-      //   logoutOfWeb3Modal();
     });
 
     // Subscribe to session disconnection
@@ -309,14 +306,7 @@ const App = props => {
           </Route>
           <Route exact path="/badge">
             {isConnected ? (
-              <YourBadge
-                address={address}
-                gasPrice={gasPrice}
-                tx={tx}
-                readContracts={readContracts}
-                writeContracts={writeContracts}
-                localProvider={localProvider}
-              />
+              <YourBadge address={address} readContracts={readContracts} localProvider={localProvider} />
             ) : (
               <Redirect to="/connect" />
             )}

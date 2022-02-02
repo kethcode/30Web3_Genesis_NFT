@@ -49,7 +49,6 @@ const ItemStyles = styled(motion.li)`
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  //   border: 1px solid ${props => props.theme.get("md.sys.color.outline", props.colorMode)};
   background: ${props => props.theme.get("md.sys.color.surface", props.colorMode)};
   border-radius: 12px;
 `;
@@ -79,8 +78,7 @@ const StyledAddress = styled(Address)`
   margin-bottom: 0.5rem;
 `;
 
-const Texts = ({ transferEvents, web3Modal }) => {
-  const isConnected = useIsConnected(web3Modal);
+const Texts = ({ transferEvents }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: ".5rem" }}>
       {transferEvents && transferEvents.length > 0 ? (
@@ -90,16 +88,8 @@ const Texts = ({ transferEvents, web3Modal }) => {
         </>
       ) : (
         <>
-          <Title>No one claimed their reward yet</Title>
-          <Subtitle>
-            {isConnected ? (
-              <>
-                Head over <b>Your badge</b> now to be the first to claim your 30W3 NFT reward!
-              </>
-            ) : (
-              <>Connect your wallet to be the first to claim your 30W3 NFT reward!</>
-            )}
-          </Subtitle>
+          <Title>NFT rewards are on their way</Title>
+          <Subtitle>Come back soon to see here the rewards of all 30W3 participants.</Subtitle>
         </>
       )}
     </div>
@@ -173,8 +163,6 @@ const HallOfFame = ({ transferEvents, readContracts, localProvider, mainnetProvi
         readContracts={readContracts}
         localProvider={localProvider}
         mainnetProvider={mainnetProvider}
-        web3Modal={web3Modal}
-        account={account}
       />
     </>
   );
