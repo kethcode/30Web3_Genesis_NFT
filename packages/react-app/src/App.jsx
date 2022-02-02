@@ -322,16 +322,7 @@ const App = props => {
             />
           </Route>
           <Route exact path="/mint">
-            <Mint
-              address={address}
-              writeContracts={writeContracts}
-              tx={tx}
-              readContracts={readContracts}
-              localProvider={localProvider}
-              mainnetProvider={mainnetProvider}
-              web3Modal={web3Modal}
-              account={account}
-            />
+            <Mint address={address} writeContracts={writeContracts} tx={tx} />
           </Route>
           <Route exact path="/demo">
             <Demo />

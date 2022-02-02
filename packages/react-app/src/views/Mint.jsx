@@ -20,7 +20,7 @@ const WrongAddress = () => (
   </>
 );
 
-const Mint = ({ address, writeContracts, tx, readContracts, localProvider, mainnetProvider, web3Modal, account }) => {
+const Mint = ({ address, writeContracts, tx }) => {
   const ADDRESS_REGEX = /0x[a-zA-Z0-9]{40}/;
   const [transferTo, setTransferTo] = useState();
   const [minting, setMinting] = useState(false);
@@ -64,7 +64,12 @@ const Mint = ({ address, writeContracts, tx, readContracts, localProvider, mainn
         This page is only available to you. Mint here and immediately transfer the reward NFT to deserving participants.
       </Subtitle>
       <div style={{ display: "flex", gap: "1rem" }}>
-        <Input value={transferTo} placeholder="Recipient address" onChange={handleChange} style={{ width: "25rem" }} />
+        <Input
+          value={transferTo}
+          placeholder="Recipient address"
+          onChange={handleChange}
+          style={{ width: "24rem", borderRadius: "100px" }}
+        />
         <M3Button
           disabled={minting || !transferTo || !transferTo.match(ADDRESS_REGEX)}
           icon={minting ? <Spin /> : <span className="material-icons">auto_awesome</span>}
