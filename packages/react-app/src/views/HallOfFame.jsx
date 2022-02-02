@@ -2,7 +2,6 @@ import { Spin } from "antd";
 import { motion } from "framer-motion";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import styled from "styled-components";
-import uniqBy from "lodash/uniqBy";
 import _ from "lodash";
 import { Address } from "../components";
 import NFT from "../components/NFT";

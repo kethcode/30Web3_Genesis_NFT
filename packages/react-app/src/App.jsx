@@ -41,6 +41,7 @@ import YourBadge from "./views/YourBadge";
 import HallOfFame from "./views/HallOfFame";
 import useIsConnected from "./hooks/useIsConnected";
 import useGetTransferEvents from "./hooks/useGetTransferEvents";
+import Mint from "./views/Mint";
 
 const { ethers } = require("ethers");
 /*
@@ -323,6 +324,18 @@ const App = props => {
           <Route exact path="/hall">
             <HallOfFame
               transferEvents={transferEvents}
+              readContracts={readContracts}
+              localProvider={localProvider}
+              mainnetProvider={mainnetProvider}
+              web3Modal={web3Modal}
+              account={account}
+            />
+          </Route>
+          <Route exact path="/mint">
+            <Mint
+              address={address}
+              writeContracts={writeContracts}
+              tx={tx}
               readContracts={readContracts}
               localProvider={localProvider}
               mainnetProvider={mainnetProvider}

@@ -5,17 +5,26 @@ import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import useHasNftClaimable from "../hooks/useHasNftClaimable";
 import M3Typography from "../M3Typography";
+import MINTER_ADDRESS from "../MINTER_ADDRESS";
 
 const ITEMS = [
   {
     label: "Your badge",
     icon: "card_membership",
     to: "/badge",
+    limitToAddres: undefined,
   },
   {
     label: "Hall of fame",
     icon: "emoji_events",
     to: "/hall",
+    limitToAddres: undefined,
+  },
+  {
+    label: "Mint",
+    icon: "auto_awesome",
+    to: "/mint",
+    limitToAddres: MINTER_ADDRESS,
   },
 ];
 
@@ -146,10 +155,11 @@ const Nav = ({ address, readContracts }) => {
   const { currentTheme } = useThemeSwitcher();
   const colorMode = currentTheme ?? "light";
   const hasNftClaimable = useHasNftClaimable(address, readContracts);
+  const items = ITEMS.filter(item => !item.limitToAddres || item.limitToAddres === address);
 
   return (
     <Container colorMode={colorMode}>
-      {ITEMS.map((item, index) => (
+      {items.map((item, index) => (
         <NavItem
           key={index}
           label={item.label}
@@ -157,7 +167,7 @@ const Nav = ({ address, readContracts }) => {
           to={item.to}
           colorMode={colorMode}
           isFirst={index === 0}
-          isLast={index === ITEMS.length - 1}
+          isLast={index === items.length - 1}
           hasNotif={hasNftClaimable && index === 0}
         />
       ))}
