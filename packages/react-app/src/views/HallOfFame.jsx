@@ -2,6 +2,8 @@ import { Spin } from "antd";
 import { motion } from "framer-motion";
 import { useThemeSwitcher } from "react-css-theme-switcher";
 import styled from "styled-components";
+import uniqBy from "lodash/uniqBy";
+import _ from "lodash";
 import { Address } from "../components";
 import NFT from "../components/NFT";
 import M3Typography from "../M3Typography";
@@ -124,9 +126,16 @@ const Actions = ({ web3Modal, account }) => {
 const Content = ({ transferEvents, readContracts, localProvider, mainnetProvider }) => {
   const { currentTheme } = useThemeSwitcher();
   const colorMode = currentTheme ?? "light";
+  const events = _.chain([...transferEvents])
+    .sortBy("blockNumber")
+    .reverse()
+    .uniqBy(e => e.args[2]._hex)
+    .value()
+    .reverse();
+
   return transferEvents && transferEvents.length > 0 ? (
     <Container variants={containerMotion} initial="hidden" animate="visible">
-      {transferEvents.map((e, index) => (
+      {events.map((e, index) => (
         <Item key={index} address={e.args[1]} colorMode={colorMode} variants={itemMotion}>
           <NFT address={e.args[1]} readContracts={readContracts} localProvider={localProvider} disableHoverEffect />
           <StyledAddress address={e.args[1]} ensProvider={mainnetProvider} variant="text" />
@@ -142,7 +151,7 @@ const Content = ({ transferEvents, readContracts, localProvider, mainnetProvider
               event
             </DateIcon>
             <M3Typography fontTokenId="md.sys.typescale.label-medium" colorTokenId="md.sys.color.on-surface-variant">
-              Minted at block #{e.blockNumber}
+              Received at block #{e.blockNumber}
             </M3Typography>
           </div>
         </Item>
