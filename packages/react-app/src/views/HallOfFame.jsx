@@ -15,6 +15,7 @@ import Subtitle from "../components/Subtitle";
 
 const Container = styled(motion.ul)`
   width: 100%;
+  height: 100%;
   max-width: 68rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));

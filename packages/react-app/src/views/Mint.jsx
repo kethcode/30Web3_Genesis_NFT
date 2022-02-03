@@ -68,7 +68,7 @@ const Mint = ({ address, writeContracts, tx }) => {
           value={transferTo}
           placeholder="Recipient address"
           onChange={handleChange}
-          style={{ width: "24rem", borderRadius: "100px" }}
+          style={{ width: "25rem", borderRadius: "100px" }}
         />
         <M3Button
           disabled={minting || !transferTo || !transferTo.match(ADDRESS_REGEX)}
