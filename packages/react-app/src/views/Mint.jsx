@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import { Input, Spin } from "antd";
 import PropTypes from "prop-types";
-import { MerkleTree } from "merkletreejs";
-import keccak256 from "keccak256";
 import M3Button from "../components/M3Button";
 import Title from "../components/Title";
 import Subtitle from "../components/Subtitle";
 import { Link } from "react-router-dom";
 import MINTER_ADDRESS from "../MINTER_ADDRESS";
-import { whitelist } from "../assets/whitelist.js";
 
 const WrongAddress = () => (
   <>
@@ -26,15 +23,9 @@ const Mint = ({ address, writeContracts, tx }) => {
   const [minting, setMinting] = useState(false);
   const handleChange = e => setTransferTo(e.target.value);
 
-  const leafNodes = whitelist.map(address => keccak256(address));
-  const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true });
-  const root = merkleTree.getRoot();
-  const leaf = keccak256(address);
-  const proof = merkleTree.getHexProof(leaf);
-
   const handleMintAndTransfer = async () => {
     setMinting(true);
-    const result = tx(writeContracts.NFT30Web3.mint(proof, root, leaf), update => {
+    const result = tx(writeContracts.NFT30Web3.mint(transferTo), update => {
       setMinting(false);
       console.log("📡 Transaction Update:", update);
       if (update && (update.status === "confirmed" || update.status === 1)) {

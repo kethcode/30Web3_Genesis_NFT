@@ -1,40 +1,48 @@
 // deploy/00_deploy_your_contract.js
 
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
 const { ethers } = require("hardhat");
 const localChainId = "31337";
 
-const { MerkleTree } = require('merkletreejs');
-const keccak256 = require('keccak256');
-const fs = require("fs");
-
 module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
-
-  let buf = fs.readFileSync("../react-app/src/assets/whitelist.js").toString().split("[")[1].split("]")[0].toString();
-  let whitelist = buf.replace(/"/g, '').replace(/,/g, '').trim().split("\n");
-
-  for(let i = 0; i < whitelist.length; i++) {
-      whitelist[i] = whitelist[i].trim();
-  }
   
-  const leafNodes = whitelist.map(addr => keccak256(addr));
-  const merkleTree =  new MerkleTree(leafNodes, keccak256, {sortPairs: true });
-  const root = merkleTree.getRoot();
-
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
+
+  //const wslyvh = '0x63cab69189dBa2f1544a25c8C19b4309f415c8AA';
+  const wslyvh = '0x9194eFdF03174a804f3552F4F7B7A4bB74BaDb7F';
   
   await deploy("NFT30Web3", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     // args: [ "Hello", ethers.utils.parseEther("1.5") ],
-    args: [ deployer, "Genesis", root ],
+    args: [ wslyvh, "Genesis" ],
     log: true,
     waitConfirmations: 5,
   });
 
   // Getting a previously deployed contract
   const nftContract = await ethers.getContract("NFT30Web3", deployer);
+
+  console.log("Deployed:", nftContract.address);
+  console.log("Deployer:", deployer);
+
+  console.log("Waiting for bytecode to propogate (60sec)");
+  await delay(60000);
+
+  console.log("Verifying on Etherscan");
+
+  await hre.run("verify:verify", {
+      address: nftContract.address,
+      constructorArguments: [
+        wslyvh,
+        "Genesis"
+      ]
+    });
+
+  console.log("Verified on Etherscan");
 
 
   /*  await YourContract.setPurpose("Hello");
