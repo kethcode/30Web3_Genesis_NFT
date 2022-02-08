@@ -1,10 +1,8 @@
-import { useEventListener } from "eth-hooks/events/useEventListener";
+import { useContractReader } from "eth-hooks";
 
-const useGetNftId = (address, readContracts, localProvider) => {
-  const events = useEventListener(readContracts, "NFT30Web3", "Transfer", localProvider, 1);
-  const idAsHex = events.find(item => item.args[1] === address)?.args[2]._hex;
-  const id = parseInt(idAsHex);
-  return id;
+const useGetNftId = (address, index, readContracts) => {
+  const id = useContractReader(readContracts, "NFT30Web3", "tokenOfOwnerByIndex", [address, index]);
+  return Number(id?._hex);
 };
 
 export default useGetNftId;

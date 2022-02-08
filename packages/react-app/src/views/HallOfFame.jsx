@@ -119,7 +119,7 @@ const Content = ({ transferEvents, readContracts, localProvider, mainnetProvider
   const events = _.chain([...transferEvents])
     .sortBy("blockNumber")
     .reverse()
-    .uniqBy(e => e.args[2]._hex)
+    .uniqBy(e => e.args[2]._hex) // If the NFT has been transferred, keep current owner
     .value()
     .reverse();
 
@@ -127,7 +127,13 @@ const Content = ({ transferEvents, readContracts, localProvider, mainnetProvider
     <Container variants={containerMotion} initial="hidden" animate="visible">
       {events.map((e, index) => (
         <Item key={index} address={e.args[1]} colorMode={colorMode} variants={itemMotion}>
-          <NFT address={e.args[1]} readContracts={readContracts} localProvider={localProvider} disableHoverEffect />
+          <NFT
+            address={e.args[1]}
+            id={Number(e.args[2]._hex)}
+            readContracts={readContracts}
+            localProvider={localProvider}
+            disableHoverEffect
+          />
           <StyledAddress address={e.args[1]} ensProvider={mainnetProvider} variant="text" />
           <div
             style={{

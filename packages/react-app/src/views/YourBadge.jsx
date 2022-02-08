@@ -1,10 +1,10 @@
 import { Spin } from "antd";
 import PropTypes from "prop-types";
-import NFT from "../components/NFT";
 import useHasNft from "../hooks/useHasNft";
 import { ReactComponent as OlaSittingOnTheFloorFemale } from "../illustrations/OlaSittingOnTheFloorFemale.svg";
 import Title from "../components/Title";
 import Subtitle from "../components/Subtitle";
+import AllAccountNFTs from "../components/AllAccountNFTs";
 
 const NoNftThisAddress = () => (
   <>
@@ -28,7 +28,7 @@ const NftClaimed = ({ address, readContracts, localProvider }) => (
         Buidloooooor!
       </Subtitle>
     </div>
-    <NFT address={address} readContracts={readContracts} localProvider={localProvider} />
+    <AllAccountNFTs address={address} readContracts={readContracts} localProvider={localProvider} />
   </>
 );
 

@@ -1,19 +1,9 @@
 import { useContractReader } from "eth-hooks";
+import parseTokenURI from "../helpers/parseTokenURI";
 
 export const useGetNft = (id, readContracts) => {
   // Returns a string like "data:application/json;base64,XXX..."
-  const nft = useContractReader(readContracts, "NFT30Web3", "tokenURI", [id]);
-  if (!nft) return undefined;
-  // Remove the heading part ("data:application/json;base64,")
-  const content = nft.substring(29, nft.length - 1);
-  // Decode
-  const decoded = Buffer.from(content, "base64");
-  // Somethimes the closing bracket disappears... Don't know why
-  let asString = decoded.toString();
-  if (asString[asString.length - 1] !== "}") {
-    asString += "}";
-  }
-  // Parse
-  const parsed = JSON.parse(asString);
-  return parsed;
+  const tokenURI = useContractReader(readContracts, "NFT30Web3", "tokenURI", [id]);
+  if (!tokenURI) return undefined;
+  return parseTokenURI(tokenURI);
 };

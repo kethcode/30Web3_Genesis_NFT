@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Skeleton } from "antd";
 import { motion } from "framer-motion";
 import { useThemeSwitcher } from "react-css-theme-switcher";
@@ -59,38 +60,18 @@ const LoadingNFT = () => (
   </Base>
 );
 
-// Lazily render underlying componentto prevent initial caching when address is undefined
-const IfAddress = ({ address, readContracts, localProvider, disableHoverEffect }) =>
-  address ? (
-    <NftIdLoader
-      address={address}
-      readContracts={readContracts}
-      localProvider={localProvider}
-      disableHoverEffect={disableHoverEffect}
-    />
-  ) : (
-    <LoadingNFT />
-  );
-
-// Lazily call "useGetNftId" to prevent initial caching when address is undefined
-const NftIdLoader = ({ address, readContracts, localProvider, disableHoverEffect }) => {
-  const nftId = useGetNftId(address, readContracts, localProvider);
-  return nftId >= 0 ? (
-    <NftLoader
-      nftId={nftId}
-      address={address}
-      readContracts={readContracts}
-      localProvider={localProvider}
-      disableHoverEffect={disableHoverEffect}
-    />
-  ) : (
-    <LoadingNFT />
-  );
-};
+const SvgToBaseAdapter = styled.img`
+  width: 100%;
+`;
+const ClaimedNFT = ({ name, description, image, disableHoverEffect }) => (
+  <Base disableHoverEffect={disableHoverEffect}>
+    <SvgToBaseAdapter src={image} alt={name + ", " + description} />
+  </Base>
+);
 
 // Lazily call "useGetNft" to prevent initial caching when nftId is undefined
-const NftLoader = ({ nftId, readContracts, disableHoverEffect }) => {
-  const nft = useGetNft(nftId, readContracts);
+const NftLoader = ({ id, readContracts, disableHoverEffect }) => {
+  const nft = useGetNft(id, readContracts);
   return nft ? (
     <ClaimedNFT
       name={nft.name}
@@ -103,16 +84,52 @@ const NftLoader = ({ nftId, readContracts, disableHoverEffect }) => {
   );
 };
 
-const SvgToBaseAdapter = styled.img`
-  width: 100%;
-`;
-const ClaimedNFT = ({ name, description, image, disableHoverEffect }) => (
-  <Base disableHoverEffect={disableHoverEffect}>
-    <SvgToBaseAdapter src={image} alt={name + ", " + description} />
-  </Base>
-);
+// Lazily call "useGetNftId" to prevent initial caching when address is undefined
+const NftIdLoader = ({ address, index, readContracts, localProvider, disableHoverEffect }) => {
+  const id = useGetNftId(address, index, readContracts);
+  return id >= 0 ? (
+    <NftLoader
+      id={id}
+      address={address}
+      readContracts={readContracts}
+      localProvider={localProvider}
+      disableHoverEffect={disableHoverEffect}
+    />
+  ) : (
+    <LoadingNFT />
+  );
+};
 
-const NFT = ({ mystery, address, readContracts, localProvider, disableHoverEffect }) => {
+// Lazily render underlying component to prevent initial caching when address is undefined
+const IfAddress = ({ address, id, index, readContracts, localProvider, disableHoverEffect }) => {
+  if (!address) return <LoadingNFT />;
+
+  if (id >= 0)
+    return (
+      <NftLoader
+        address={address}
+        id={id}
+        readContracts={readContracts}
+        localProvider={localProvider}
+        disableHoverEffect={disableHoverEffect}
+      />
+    );
+
+  if (index >= 0)
+    return (
+      <NftIdLoader
+        address={address}
+        index={index}
+        readContracts={readContracts}
+        localProvider={localProvider}
+        disableHoverEffect={disableHoverEffect}
+      />
+    );
+
+  return <LoadingNFT />;
+};
+
+const NFT = ({ mystery, address, id, index, readContracts, localProvider, disableHoverEffect }) => {
   const { currentTheme } = useThemeSwitcher();
   const colorMode = currentTheme ?? "light";
   return mystery ? (
@@ -120,11 +137,21 @@ const NFT = ({ mystery, address, readContracts, localProvider, disableHoverEffec
   ) : (
     <IfAddress
       address={address}
+      id={id}
+      index={index}
       readContracts={readContracts}
       localProvider={localProvider}
       disableHoverEffect={disableHoverEffect}
     />
   );
+};
+
+NFT.propTypes = {
+  mystery: PropTypes.bool,
+  address: PropTypes.string,
+  id: PropTypes.number, // ID of the NFT
+  index: PropTypes.number, // index of the NFT for this address, returned by ERC721Enumerable.tokenOfOwnerByIndex
+  disableHoverEffect: PropTypes.bool,
 };
 
 NFT.defaultProps = {
