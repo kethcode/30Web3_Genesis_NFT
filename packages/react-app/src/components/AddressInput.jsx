@@ -66,7 +66,7 @@ export default function AddressInput(props) {
   );
 
   return (
-    <div>
+    <div style={props.style}>
       {scan ? (
         <div
           style={{

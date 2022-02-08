@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Input, Spin } from "antd";
+import { Spin } from "antd";
 import PropTypes from "prop-types";
 import M3Button from "../components/M3Button";
 import Title from "../components/Title";
 import Subtitle from "../components/Subtitle";
 import { Link } from "react-router-dom";
 import MINTER_ADDRESS from "../MINTER_ADDRESS";
+import { AddressInput } from "../components";
 
 const WrongAddress = () => (
   <>
@@ -18,10 +19,9 @@ const WrongAddress = () => (
 );
 
 const Mint = ({ address, writeContracts, tx }) => {
-  const ADDRESS_REGEX = /0x[a-zA-Z0-9]{40}/;
+  const ADDRESS_OR_ENS_REGEX = /(0x[a-zA-Z0-9]{40}|.*.eth)/; // Matches "0x....." or "xxxx.eth"
   const [transferTo, setTransferTo] = useState();
   const [minting, setMinting] = useState(false);
-  const handleChange = e => setTransferTo(e.target.value);
 
   const handleMintAndTransfer = async () => {
     setMinting(true);
@@ -29,7 +29,7 @@ const Mint = ({ address, writeContracts, tx }) => {
       setMinting(false);
       console.log("📡 Transaction Update:", update);
       if (update && (update.status === "confirmed" || update.status === 1)) {
-        setTransferTo(undefined);
+        setTransferTo("");
         console.log(" 🍾 Transaction " + update.hash + " finished!");
         console.log(
           " ⛽️ " +
@@ -52,17 +52,18 @@ const Mint = ({ address, writeContracts, tx }) => {
     <>
       <Title>Welcome, Admin</Title>
       <Subtitle>
-        This page is only available to you. Mint here and immediately transfer the reward NFT to deserving participants.
+        This page is only available to users with role "ADMIN_ROLE". Mint here and immediately transfer the reward NFT
+        to deserving participants.
       </Subtitle>
-      <div style={{ display: "flex", gap: "1rem" }}>
-        <Input
+      <div style={{ display: "flex", gap: "1rem", alignItems: "center", width: "100%", maxWidth: "44rem" }}>
+        <AddressInput
           value={transferTo}
           placeholder="Recipient address"
-          onChange={handleChange}
-          style={{ width: "25rem", borderRadius: "100px" }}
+          onChange={setTransferTo}
+          style={{ flexGrow: 1 }}
         />
         <M3Button
-          disabled={minting || !transferTo || !transferTo.match(ADDRESS_REGEX)}
+          disabled={minting || !transferTo || !transferTo.match(ADDRESS_OR_ENS_REGEX)}
           icon={minting ? <Spin /> : <span className="material-icons">auto_awesome</span>}
           onClick={handleMintAndTransfer}
         >
