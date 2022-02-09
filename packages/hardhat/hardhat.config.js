@@ -205,22 +205,12 @@ module.exports = {
       },
     },
     optimism: {
-      url: "https://mainnet.optimism.io",
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-      companionNetworks: {
-        l1: "mainnet",
-      },
+      url: process.env.INFURA_OE_KEY,
+      accounts: [process.env.PRIVATE_KEY],
     },
     kovanOptimism: {
-      url: "https://kovan.optimism.io",
-      accounts: {
-        mnemonic: mnemonic(),
-      },
-      companionNetworks: {
-        l1: "kovan",
-      },
+      url: process.env.INFURA_OE_KOVAN_KEY,
+      accounts: [process.env.PRIVATE_KEY],
     },
     localOptimism: {
       url: "http://localhost:8545",
@@ -289,7 +279,7 @@ module.exports = {
         settings: {
           optimizer: {
             enabled: true,
-            runs: 200,
+            runs: 1,
           },
         },
       },
@@ -313,7 +303,7 @@ module.exports = {
     },
   },
   etherscan: {
-    apiKey: "DNXJA8RX2Q3VZ4URQIWP7Z68CJXQZSC6AW",
+    apiKey: process.env.OE_KOVAN_ETHERSCAN_API_KEY,
   },
 };
 
