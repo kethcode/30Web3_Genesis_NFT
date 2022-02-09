@@ -3,27 +3,27 @@ import { useThemeSwitcher } from "react-css-theme-switcher";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import useHasNft from "../hooks/useHasNft";
+import useIsAdmin from "../hooks/useIsAdmin";
 import M3Typography from "../M3Typography";
-import MINTER_ADDRESS from "../MINTER_ADDRESS";
 
 const ITEMS = [
   {
     label: "Your badge",
     icon: "card_membership",
     to: "/badge",
-    limitToAddres: undefined,
+    restrictedToAdmin: false,
   },
   {
     label: "Hall of fame",
     icon: "emoji_events",
     to: "/hall",
-    limitToAddres: undefined,
+    restrictedToAdmin: false,
   },
   {
     label: "Mint",
     icon: "auto_awesome",
     to: "/mint",
-    limitToAddres: MINTER_ADDRESS,
+    restrictedToAdmin: true,
   },
 ];
 
@@ -154,7 +154,8 @@ const Nav = ({ address, readContracts }) => {
   const { currentTheme } = useThemeSwitcher();
   const colorMode = currentTheme ?? "light";
   const hasNft = useHasNft(address, readContracts);
-  const items = ITEMS.filter(item => !item.limitToAddres || item.limitToAddres === address);
+  const isAdmin = useIsAdmin(address, readContracts);
+  const items = ITEMS.filter(item => isAdmin || !item.restrictedToAdmin);
 
   return (
     <Container colorMode={colorMode}>

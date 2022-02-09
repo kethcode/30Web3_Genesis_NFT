@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Spin } from "antd";
 import PropTypes from "prop-types";
+import { Spin } from "antd";
+import { Link } from "react-router-dom";
+import useIsAdmin from "../hooks/useIsAdmin";
 import M3Button from "../components/M3Button";
 import Title from "../components/Title";
 import Subtitle from "../components/Subtitle";
-import { Link } from "react-router-dom";
-import MINTER_ADDRESS from "../MINTER_ADDRESS";
 import { AddressInput } from "../components";
 
 const WrongAddress = () => (
@@ -18,10 +18,11 @@ const WrongAddress = () => (
   </>
 );
 
-const Mint = ({ address, writeContracts, tx }) => {
+const Mint = ({ address, readContracts, writeContracts, tx }) => {
   const ADDRESS_OR_ENS_REGEX = /(0x[a-zA-Z0-9]{40}|.*.eth)/; // Matches "0x....." or "xxxx.eth"
   const [transferTo, setTransferTo] = useState();
   const [minting, setMinting] = useState(false);
+  const isAdmin = useIsAdmin(address, readContracts);
 
   const handleMintAndTransfer = async () => {
     setMinting(true);
@@ -46,7 +47,7 @@ const Mint = ({ address, writeContracts, tx }) => {
     console.log(await result);
   };
 
-  return address !== MINTER_ADDRESS ? (
+  return !isAdmin ? (
     <WrongAddress />
   ) : (
     <>
@@ -75,7 +76,7 @@ const Mint = ({ address, writeContracts, tx }) => {
 };
 
 Mint.propTypes = {
-  address: PropTypes.string.isRequired,
+  address: PropTypes.string,
 };
 
 export default Mint;
