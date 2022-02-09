@@ -3,7 +3,7 @@ import { useThemeSwitcher } from "react-css-theme-switcher";
 import M3Button from "./M3Button";
 
 export default function ThemeSwitcher() {
-  const [theme, setTheme] = useState(window.localStorage.getItem("theme"));
+  const [theme, setTheme] = useState(window.localStorage.getItem("theme") ?? "dark");
   const { switcher } = useThemeSwitcher();
 
   useEffect(() => {
@@ -11,7 +11,7 @@ export default function ThemeSwitcher() {
   }, [theme]);
 
   const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
+    const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
     switcher({ theme: newTheme });
   };
@@ -22,10 +22,10 @@ export default function ThemeSwitcher() {
       onlyIcon
       onClick={toggleTheme}
       icon={
-        theme === "light" ? (
-          <span className="material-icons">light_mode</span>
-        ) : (
+        theme === "dark" ? (
           <span className="material-icons">dark_mode</span>
+        ) : (
+          <span className="material-icons">light_mode</span>
         )
       }
     />
