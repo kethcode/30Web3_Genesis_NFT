@@ -34,25 +34,25 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   console.log("Deployed:", nftContract.address);
   console.log("Deployer:", deployer);
 
-  // console.log("Waiting for bytecode to propogate (60sec)");
-  // await delay(60000);
+  console.log("Waiting for bytecode to propogate (150sec)");
+  await delay(150000);
 
-  // console.log("Verifying on Etherscan");
+  console.log("Verifying on Etherscan");
 
-  // await hre.run("verify:verify", {
-  //     address: nftContract.address,
-  //     constructorArguments: 
-  //     [
-  //       [
-  //         '0x9194eFdF03174a804f3552F4F7B7A4bB74BaDb7F',
-  //         '0xDD14ffFAeF2E6F4889c2EDD1418fc816AB48ac26',
-  //         '0x63cab69189dBa2f1544a25c8C19b4309f415c8AA'
-  //       ],
-  //       "Genesis"
-  //     ]
-  //   });
+  await hre.run("verify:verify", {
+      address: nftContract.address,
+      constructorArguments: 
+      [
+        [
+          '0x9194eFdF03174a804f3552F4F7B7A4bB74BaDb7F',
+          '0xDD14ffFAeF2E6F4889c2EDD1418fc816AB48ac26',
+          '0x63cab69189dBa2f1544a25c8C19b4309f415c8AA'
+        ],
+        "Genesis"
+      ]
+    });
 
-  // console.log("Verified on Etherscan");
+  console.log("Verified on Etherscan");
 
 
   /*  await YourContract.setPurpose("Hello");
