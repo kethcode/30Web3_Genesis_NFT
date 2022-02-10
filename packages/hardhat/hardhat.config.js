@@ -102,6 +102,7 @@ module.exports = {
     rinkeby: {
       url: process.env.INFURA_RINKEBY_KEY,
       accounts: [process.env.PRIVATE_KEY],
+	  gasPrice: 1100000000,
     },
     
     kovan: {

@@ -53,7 +53,7 @@ const Mint = ({ address, readContracts, writeContracts, tx }) => {
     <>
       <Title>Welcome, Admin</Title>
       <Subtitle>
-        This page is only available to users with role "ADMIN_ROLE". Mint here and immediately transfer the reward NFT
+        This page is only available to users on the adminlist. Mint here and immediately transfer the reward NFT
         to deserving participants.
       </Subtitle>
       <div style={{ display: "flex", gap: "1rem", alignItems: "center", width: "100%", maxWidth: "44rem" }}>
